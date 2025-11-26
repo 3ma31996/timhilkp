@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panduan Teknis - Tim Hilirisasi 3 KKP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #01267F 0%, #001a4d 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #01267F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .title-section h1 {
+            color: #01267F;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .title-section p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .back-button {
+            background: #01267F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #001a4d;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .page-title p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            text-decoration: none;
+            color: #01267F;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+            border-color: #01267F;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .menu-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .menu-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #01267F;
+        }
+        
+        .menu-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .coming-soon {
+            background: #f39c12;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">KKP</div>
+                <div class="title-section">
+                    <h1>Panduan Teknis</h1>
+                    <p>Tim Hilirisasi 3 - Kementerian Kelautan dan Perikanan</p>
+                </div>
+            </div>
+            <a href="index.html" class="back-button">← Kembali ke Home</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-title">
+            <h1>Panduan Teknis</h1>
+            <p>Pilih jenis panduan yang Anda butuhkan</p>
+        </div>
+        
+        <div class="menu-grid">
+            <!-- Panduan PDF to Excel -->
+            <a href="pdf-to-excel.html" class="menu-card">
+                <span class="menu-icon">📄</span>
+                <h3>PDF to Excel</h3>
+                <p>Panduan lengkap konversi file PDF ke format Excel menggunakan iLovePDF</p>
+            </a>
+
+            <!-- Panduan Lainnya (Coming Soon) -->
+            <a href="#" class="menu-card">
+                <span class="menu-icon">📊</span>
+                <h3>Data Cleaning</h3>
+                <p>Panduan pembersihan dan validasi data Excel</p>
+                <span class="coming-soon">Coming Soon</span>
+            </a>
+
+            <a href="#" class="menu-card">
+                <span class="menu-icon">🔢</span>
+                <h3>Analisis Statistik</h3>
+                <p>Teknik analisis data menggunakan Excel dan tools statistik</p>
+                <span class="coming-soon">Coming Soon</span>
+            </a>
+
+            <a href="#" class="menu-card">
+                <span class="menu-icon">📈</span>
+                <h3>Visualisasi Data</h3>
+                <p>Panduan membuat chart dan dashboard di Excel</p>
+                <span class="coming-soon">Coming Soon</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Tim Hilirisasi 3 - Kementerian Kelautan dan Perikanan</p>
+    </footer>
+</body>
+</html>
