@@ -158,12 +158,24 @@
             margin: 20px 0;
             color: #666;
             font-style: italic;
-            width: 80%;
-            height: 80%;
-            object-fit: cover;     /* Potong gambar agar penuh */
-            object-fit: contain;   /* Tampilkan seluruh gambar */
-            object-fit: fill;      /* Regangkan gambar (bisa distorsi) */
-            object-fit: scale-down; /* Seperti contain tapi lebih kecil */
+        }
+
+        .image-container {
+            width: 100%;
+            height: 400px; /* Atau tinggi yang diinginkan */
+            max-width: 900px;
+            margin: 20px auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden; /* Penting! */
+            background: #f8f9fa;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Gambar akan memenuhi kotak */
+            display: block;
         }
         
         .tips-box {
@@ -279,7 +291,7 @@
                     <li>Pilih hasil pertama bertuliskan "iLovePDF | Online PDF tools for PDF lovers"</li>
                     <li>Klik link tersebut untuk masuk ke website iLovePDF</li>
                 </ol>
-                    <div class="image-placeholder">
+                    <div class="image-container">
                     <img src="Picture1.png" alt="Tampilan pencarian Google untuk iLovePDF">
                 </div>
             </div>
@@ -298,7 +310,7 @@
                     <li>Klik tombol "PDF to Excel" di bagian kanan bawah grid tools</li>
                     <li>Pastikan tool yang dipilih adalah PDF to Excel, bukan PDF to Word/JPG</li>
                 </ol>
-                    <div class="image-placeholder">
+                    <div class="image-container">
                     <img src="Picture2.png" alt="Masuk ke fitur konversi PDF ke Excel">
                 </div>
             </div>
@@ -317,7 +329,7 @@
                     <li>Tunggu sampai jendela pemilihan file muncul</li>
                     <li>Pilih file PDF yang ingin dikonversi</li>
                 </ol>
-                    <div class="image-placeholder">
+                    <div class="image-container">
                     <img src="Picture3.png" alt="Memasukkan file PDF yang ingin dikonversi">
                 </div>
                 <div class="tips-box">
@@ -340,7 +352,7 @@
                     <li><strong>One sheet</strong> → jika hanya 1 tabel besar</li>
                     <li>Untuk dataset long / multi-tabel per halaman, pilih Multiple sheets</li>
                 </ul>
-                    <div class="image-placeholder">
+                    <div class="image-container">
                     <img src="Picture5.png" alt="Mengatur layout hasil konversi sebelum diproses">
                 </div>
             </div>
@@ -360,7 +372,7 @@
                     <li>Klik tombol merah "Download EXCEL" setelah proses selesai</li>
                     <li>Simpan file ke folder tujuan</li>
                 </ol>
-                    <div class="image-placeholder">
+                    <div class="image-container">
                     <img src="Picture6.png" alt="Mengunduh file Excel hasil konversi">
                 </div>
             </div>
