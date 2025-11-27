@@ -377,7 +377,364 @@
                 </div>
             </div>
         </div>
+          
+        <!-- Slide 6 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buka file Excel hasil konversi.</li>
+                    <li>Periksa apakah header tabel (Kolom A–D) sudah sesuai dengan tabel di PDF</li>
+                    <li>Perhatikan jika terdapat tanda “*” atau titik (.) sebagai missing value</li>
+                    <li>Catat adanya multi-header (judul baris 1 dan baris 2) untuk proses cleaning selanjutnya</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture8.png" alt="Mengecek struktur tabel di dalam Excel">
+                </div>
+            </div>
+        </div>
+                
+        <!-- Slide 7 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buka kembali PDF sumber</li>
+                    <li>Cocokkan judul tabel, nama kolom, dan urutan variabel</li>
+                    <li>Pastikan angka dan kode industri sesuai</li>
+                    <li>Identifikasi simbol khusus seperti * atau bold (ini biasanya footnote atau missing)</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture9.png" alt="Membandingkan hasil konversi Excel dengan tabel asli">
+                </div>
+            </div>
+        </div>
         
+        <!-- Slide 8 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buka file Excel baru</li>
+                    <li>Buat header dataset dalam format data: Kode Industri,Tanah, GedungMesin dan Perlengkapan, KendaraanPerangkat Lunak / Database, Modal Tetap Lainnya, Total</li>
+                    <li>Tambahkan merge cell / merge column di template ini</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture10.png" alt="Membentuk struktur dataset standar sebelum input">
+                </div>
+            </div>
+        </div>
+         
+        <!-- Slide 9 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Periksa setiap kolom apakah sudah sesuai nama variabel: Tanah, Gedung, Mesin dan Perlengkapan, Kendaraan, Perangkat Lunak/Database, Modal Tetap Lainnya, Total</li>
+                    <li>Pastikan tidak ada kolom yang hilang akibat proses konversi</li>
+                    <li>Cek apakah format angka masih ada pemisah ribuan (titik), jika ya → tidak perlu dihapus dulu</li>
+                    <li>Pastikan baris kosong atau tanda “-” menandakan missing value, bukan 0</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture11.png" alt="Memastikan struktur tabel yang di-convert sesuai format asli">
+                </div>
+            </div>
+        </div>
+               
+        <!-- Slide 10 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Scroll ke tengah tabel dan cari blok data yang tidak beraturan</li>
+                    <li>Perhatikan nilai yang ditandai * pada kolom tertentu → ini menunjukkan data tidak tersedia di publikasi</li>
+                    <li>Catat kode industri yang memiliki baris kosong berturut-turut</li>
+                    <li>Tandai range data tersebut untuk proses pembersihan manual atau imputasi nanti</li>
+                    <li>Dan karena tidak banyak, perbaiki secara manual dengan masukan 2 baris lalu isi sesuai file asli (.pdf)</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture12.png" alt="Mengidentifikasi data abnormal/missing yang tidak rapi">
+                </div>
+            </div>
+        </div>
+               
+        <!-- Slide 11 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Tambahkan kolom “Keterangan” di sebelah kanan kolom Kode Industri</li>
+                    <li>Isi dengan nilai IB atau IBS sesuai kategori pada tabel PDF</li>
+                    <li>Data ini penting untuk filter pemrosesan statistik berdasarkan ukuran industri</li>
+                    <li>Pastikan tidak ada sel kosong di kolom metadata</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture13.png" alt="Menambah Kolom Metadata">
+                </div>
+            </div>
+        </div>
+               
+        <!-- Slide 11 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Tambahkan kolom “Keterangan” di sebelah kanan kolom Kode Industri</li>
+                    <li>Isi dengan nilai IB atau IBS sesuai kategori pada tabel PDF</li>
+                    <li>Data ini penting untuk filter pemrosesan statistik berdasarkan ukuran industri</li>
+                    <li>Pastikan tidak ada sel kosong di kolom metadata</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture13.png" alt="Menambah Kolom Metadata">
+                </div>
+            </div>
+        </div>
+                       
+        <!-- Slide 12 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Gunakan nama sheet standard: COMPILE_PENAMBAHAN untuk data penambahan/pembelian</li>
+                    <li>Hindari mencampur data jenis lain (misal pengurangan, depresiasi) dalam sheet ini</li>
+                    <li>Buat sheet terpisah seperti COMPILE_PENGURANGAN jika dataset lain tersedia</li>
+                    <li>Simpan tabel awal setelah input sekitar 10–20 baris sebagai checkpoint</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture14.png" alt="Struktur Sheet Kompilasi">
+                </div>
+            </div>
+        </div>
+                       
+        <!-- Slide 13 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Klik menu File di kiri atas Excel</li>
+                    <li>Pilih Save As untuk menyimpan file baru</li>
+                    <li>Jangan gunakan Save, karena file masih kosong atau auto-generated</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture15.png" alt="Menyimpan workbook agar struktur tidak hilang">
+                </div>
+            </div>
+        </div>
+                       
+        <!-- Slide 14 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Klik Browse agar bisa memilih direktori manual</li>
+                    <li>Hindari penyimpanan di lokasi acak seperti Desktop</li>
+                    <li>Gunakan folder proyek/data master yang konsisten agar mudah diakses</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture17.png" alt="Menentukan folder tujuan yang konsisten">
+                </div>
+            </div>
+        </div>
+                       
+        <!-- Slide 15 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Gunakan format nama file: [Tahun]_[Sumber]_[Topik]_[Kategori].xlsxContoh:2018_BPS_Statistik Industri Manufaktur Industri_IB.xlsx</li>
+                    <li>Pastikan tidak menggunakan spasi di awal/akhir atau karakter ilegal seperti / * |.</li>
+                    <li>Klik Save</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture18.png" alt="Penamaan file sesuai standar data Bappenas/PHKEI">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 16 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Lakukan hal yang sama terhadap data tahun-tahun yang lain</li>
+                    <li>Kumpulkan dalam 1 folder</li>
+                    <li>File siap di compile</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture19.png" alt="Data tahun yang lain">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 17 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buka salah satu workbook tahun (contoh: 2022)</li>
+                    <li>Pilih data dari baris pertama hingga baris terakhir tabel (jangan pilih kolom kosong)</li>
+                    <li>Pastikan seluruh kolom: Kode Industri s.d Total termasuk dalam area seleksi</li>
+                    <li>Tekan Ctrl + C untuk menyalin</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture20.png" alt="Menyalin Data dari Workbook Sumber">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 18 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buat workbook baru dengan struktur kolom berikut:Kode Industri, Tipe Industri, Tanah, GedungMesin dan Perlengkapan, Kendaraan, Perangkat Lunak/Database, Modal Tetap Lainnya, Total, Tahun, Jenis, Digit</li>
+                    <li>Jangan gunakan merge cell</li>
+                    <li>Kolom metadata harus berada di kanan blok variabel utama</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture21.png" alt="Template Database Final">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 19 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Klik sel A2 pada sheet database</li>
+                    <li>Paste data menggunakan:Paste Special → Values (tanpa format)</li>
+                    <li>Pastikan baris header tidak ikut ter-copy</li>
+                    <li>Verifikasi apakah data masuk sesuai kolom</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture22.png" alt="Paste ke Template">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 20 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Pada kolom Tahun, isi nilai sesuai dokumen (contoh: 2022)</li>
+                    <li>Pada kolom Jenis, isi sesuai tabel: Pembelian/Penambahan dan Pembuatan/Perbaikan Besar</li>
+                    <li>Jangan mempersingkat deskripsi karena konsistensi penting untuk model data</li>
+                    <li>Pada kolom Digit, gunakan formula: =LEN(A2)</li>
+                    <li>Drag ke bawah hingga seluruh baris terisi</li>
+                    <li>Digit akan menjadi metadata untuk filtrasi analisis sektoral: 2-digit = sector, 3-digit = subsector, 4-digit = industri detail</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture23.png" alt="Penambahan Metadata Tahun & Jenis">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 21 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Salin data tahun berikutnya (2021,2020, 2019, dst)</li>
+                    <li>Paste tepat di bawah baris terakhir data sebelumnya</li>
+                    <li>Pastikan kolom metadata terisi konsisten pada tiap baris</li>
+                    <li>Sheet diberi nama:2018–2022</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture24.png" alt="Kompilasi Multi-Tahun dalam 1 Sheet">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 22 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Klik menu File → Save As</li>
+                    <li>Pilih lokasi penyimpanan database jangka panjang (bukan folder sumber tahunan)</li>
+                    <li>Pilih Browse</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture25.png" alt="Menyimpan database multi-tahun pertama">
+                </div>
+            </div>
+        </div>
+                         
+        <!-- Slide 23 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Gunakan format: [RentangTahun]_[Sumber]_[Topik]_[Kategori]_db_v01.xlsx, Contoh:2018-2022_BPS_Statistik Industri Manufaktur Industri_db_v01.xlsx</li>
+                    <li>Huruf kecil/huruf besar tidak penting, yang penting konsistensi</li>
+                    <li>Klik Save</li>
+                    <li>Konversi dari file pdf menjadi excel selesai</li>
+                </ol>
+                    <div class="image-container">
+                    <img src="Picture27.png" alt="Penamaan database gabungan">
+                </div>
+            </div>
+        </div>
+                                                
         <!-- Navigation Buttons -->
         <div class="navigation">
             <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">← Kembali ke Menu Panduan</button>
