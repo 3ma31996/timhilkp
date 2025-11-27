@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF to Excel - Panduan Teknis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #01267F 0%, #001a4d 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #01267F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .title-section h1 {
+            color: #01267F;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .title-section p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .back-button {
+            background: #01267F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #001a4d;
+        }
+        
+        .main-content {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .guide-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .guide-title h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .guide-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        /* Slide Styles */
+        .slide-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            color: #01267F;
+        }
+        
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #01267F;
+        }
+        
+        .slide-number {
+            background: #01267F;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .slide-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #01267F;
+            flex-grow: 1;
+            margin-left: 15px;
+        }
+        
+        .slide-content {
+            line-height: 1.6;
+        }
+        
+        .slide-content ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-content li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .image-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .tips-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tips-box h4 {
+            color: #1976D2;
+            margin-bottom: 5px;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-button {
+            background: #01267F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .nav-button:hover {
+            background: #001a4d;
+            transform: translateY(-2px);
+        }
+        
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .slide-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-button {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="Tim H3 (1).png" alt="Logo Tim H3" class="logo">
+                <div class="title-section">
+                    <h1>PDF to Excel</h1>
+                    <p>Panduan Konversi File PDF ke Excel</p>
+                </div>
+            </div>
+            <a href="panduan-teknis.html" class="back-button">← Kembali ke Panduan</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="guide-title">
+            <h1>Panduan Konversi PDF ke Excel</h1>
+            <p>Step-by-step menggunakan iLovePDF untuk data statistik</p>
+        </div>
+        
+        <!-- Slide 1 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">1</div>
+                <div class="slide-title">Membuka Website iLovePDF</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Buka browser (Chrome/Edge/Firefox)</li>
+                    <li>Ketik kata kunci "ilovepdf" pada kolom pencarian Google</li>
+                    <li>Pilih hasil pertama bertuliskan "iLovePDF | Online PDF tools for PDF lovers"</li>
+                    <li>Klik link tersebut untuk masuk ke website iLovePDF</li>
+                </ol>
+                <div class="image-placeholder">
+                    [Gambar: Tampilan pencarian Google untuk iLovePDF]
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 2 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">2</div>
+                <div class="slide-title">Masuk ke Fitur PDF to Excel</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Setelah halaman utama iLovePDF terbuka, scroll hingga bagian menu tools</li>
+                    <li>Cari kotak warna hijau dengan ikon Excel</li>
+                    <li>Klik tombol "PDF to Excel" di bagian kanan bawah grid tools</li>
+                    <li>Pastikan tool yang dipilih adalah PDF to Excel, bukan PDF to Word/JPG</li>
+                </ol>
+                <div class="image-placeholder">
+                    [Gambar: Tampilan menu tools iLovePDF dengan highlight PDF to Excel]
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">3</div>
+                <div class="slide-title">Upload File PDF</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Pada halaman Convert PDF to EXCEL, klik tombol merah "Select PDF file"</li>
+                    <li>Alternatif: tarik file PDF ke area abu-abu bertuliskan "or drop PDF here"</li>
+                    <li>Tunggu sampai jendela pemilihan file muncul</li>
+                    <li>Pilih file PDF yang ingin dikonversi</li>
+                </ol>
+                <div class="image-placeholder">
+                    [Gambar: Tampilan upload area iLovePDF]
+                </div>
+                <div class="tips-box">
+                    <h4>💡 Tips:</h4>
+                    <p>Pastikan file PDF tidak terproteksi password dan berisi data tabel yang jelas</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">4</div>
+                <div class="slide-title">Konfigurasi Layout Hasil</div>
+            </div>
+            <div class="slide-content">
+                <h4>Pengaturan Layout:</h4>
+                <ul>
+                    <li><strong>Multiple sheets</strong> → jika PDF memiliki beberapa tabel/halaman yang berbeda</li>
+                    <li><strong>One sheet</strong> → jika hanya 1 tabel besar</li>
+                    <li>Untuk dataset long / multi-tabel per halaman, pilih Multiple sheets</li>
+                </ul>
+                <div class="image-placeholder">
+                    [Gambar: Tampilan opsi layout iLovePDF]
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5 -->
+        <div class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Proses Konversi & Download</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Klik tombol merah "Convert to EXCEL" untuk mulai proses konversi</li>
+                    <li>Tunggu hingga proses selesai (biasanya &lt;30 detik)</li>
+                    <li>Jangan tutup browser selama proses berlangsung</li>
+                    <li>Klik tombol merah "Download EXCEL" setelah proses selesai</li>
+                    <li>Simpan file ke folder tujuan</li>
+                </ol>
+                <div class="image-placeholder">
+                    [Gambar: Tampilan progress bar dan tombol download]
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="navigation">
+            <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">← Kembali ke Menu Panduan</button>
+            <button class="nav-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Ke Atas</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Tim Hilirisasi 3 - Dit. PHKEI - Kementerian PPN/Bappenas</p>
+    </footer>
+</body>
+</html>
