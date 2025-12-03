@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stata ke Excel - Tim Hilirisasi 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #01267F 0%, #001a4d 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* ===== NAVIGATION PANE ===== */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-title {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link.active {
+            background: rgba(1, 38, 127, 0.5);
+            color: white;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .nav-section {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 10px 15px;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: calc(100% - 280px);
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #01267F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .title-section h1 {
+            color: #01267F;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .title-section p {
+            color: #666;
+            font-size: 1em;
+        }
+        
+        .back-button {
+            background: #01267F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+        
+        .back-button:hover {
+            background: #001a4d;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== SLIDE STYLES ===== */
+        .slide-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            color: #01267F;
+            scroll-margin-top: 20px;
+        }
+        
+        .slide-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #01267F;
+        }
+        
+        .slide-number {
+            background: #01267F;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        
+        .slide-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #01267F;
+            margin-left: 15px;
+            flex-grow: 1;
+        }
+        
+        .slide-content {
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        .slide-content ol, .slide-content ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-content li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+        
+        .image-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 25px auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-caption {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+        
+        /* ===== ALERT BOXES ===== */
+        .alert-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            border-left-color: #2196F3;
+        }
+        
+        .alert-warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            border-left-color: #4CAF50;
+        }
+        
+        .alert-box h4 {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        /* ===== QUICK TIPS ===== */
+        .quick-tips {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .quick-tips h4 {
+            color: #01267F;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== TABLES ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .data-table th {
+            background: #01267F;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        /* ===== CODE BLOCKS ===== */
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-function {
+            color: #66d9ef;
+        }
+        
+        .code-string {
+            color: #e6db74;
+        }
+        
+        .code-number {
+            color: #ae81ff;
+        }
+        
+        .code-keyword {
+            color: #f92672;
+        }
+        
+        .code-stata {
+            color: #a6e22e;
+        }
+        
+        /* ===== METHOD CARDS ===== */
+        .method-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .method-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .method-card:hover {
+            border-color: #01267F;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .method-card h4 {
+            color: #01267F;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== NAVIGATION BUTTONS ===== */
+        .slide-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-button {
+            background: #01267F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .nav-button:hover {
+            background: #001a4d;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+            border-radius: 12px;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: 300px;
+            }
+            
+            .main-content {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .slide-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .slide-title {
+                margin-left: 0;
+                text-align: center;
+            }
+            
+            .slide-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-button {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .method-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== ICON STYLES ===== */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .stata-icon {
+            background: linear-gradient(135deg, #19588f 0%, #0d3b66 100%);
+        }
+        
+        .excel-icon {
+            background: linear-gradient(135deg, #217346 0%, #1B5E20 100%);
+        }
+        
+        .dofile-icon {
+            background: linear-gradient(135deg, #6c5ce7 0%, #5b4fcf 100%);
+        }
+        
+        .data-icon {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        }
+        
+        .regression-icon {
+            background: linear-gradient(135deg, #e17055 0%, #d65c42 100%);
+        }
+        
+        .export-icon {
+            background: linear-gradient(135deg, #fdcb6e 0%, #f9c855 100%);
+        }
+        
+        /* ===== STATA SPECIFIC STYLES ===== */
+        .stata-command {
+            background: #1e3a8a;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+            display: inline-block;
+        }
+        
+        .stata-output {
+            background: #f8f9fa;
+            border-left: 4px solid #1e3a8a;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .stata-table {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION PANE ===== -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">📈 Stata ke Excel</div>
+            <div class="sidebar-subtitle">Tim Hilirisasi 3 - Bappenas</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-section">A. STRUKTUR DO-FILE</li>
+            <li class="nav-item"><a href="#section-1" class="nav-link active">1. Anatomi Do-file</a></li>
+            <li class="nav-item"><a href="#section-2" class="nav-link">2. Data .dta Format</a></li>
+            <li class="nav-item"><a href="#section-3" class="nav-link">3. Output Stata</a></li>
+            
+            <li class="nav-section">B. METODE EKSPOR DATA</li>
+            <li class="nav-item"><a href="#section-4" class="nav-link">4. export excel</a></li>
+            <li class="nav-item"><a href="#section-5" class="nav-link">5. esttab / estout</a></li>
+            <li class="nav-item"><a href="#section-6" class="nav-link">6. putexcel</a></li>
+            
+            <li class="nav-section">C. IMPORT KE EXCEL</li>
+            <li class="nav-item"><a href="#section-7" class="nav-link">7. Import .dta/.xlsx</a></li>
+            <li class="nav-item"><a href="#section-8" class="nav-link">8. Cleaning Data</a></li>
+            <li class="nav-item"><a href="#section-9" class="nav-link">9. Formatting Excel</a></li>
+            
+            <li class="nav-section">D. WORKFLOW LENGKAP</li>
+            <li class="nav-item"><a href="#section-10" class="nav-link">10. Template Do-file</a></li>
+            <li class="nav-item"><a href="#section-11" class="nav-link">11. Troubleshooting</a></li>
+            <li class="nav-item"><a href="#section-12" class="nav-link">12. Tools & Template</a></li>
+        </ul>
+        
+        <div style="margin-top: 30px; padding: 15px; background: rgba(1, 38, 127, 0.1); border-radius: 8px;">
+            <div style="font-weight: bold; color: white; margin-bottom: 8px;">📁 File Types</div>
+            <div style="font-size: 0.9em; color: rgba(255, 255, 255, 0.8);">
+                .dta - Stata data<br>
+                .do - Stata script<br>
+                .log - Output log<br>
+                .xlsx - Excel output
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+            	<img src="Tim H3 (1).png" 
+     		alt="Logo Tim Hilirisasi 3" 
+     		class="logo-real" 
+    		style="width: 54px; height: auto;">
+                    <div class="title-section">
+                        <h1>📈 Panduan: Stata Do-file ke Excel</h1>
+                        <p>Konversi data dan hasil analisis Stata ke Excel siap olah</p>
+                    </div>
+                </div>
+                <a href="panduan-teknis.html" class="back-button">📚 Menu Panduan</a>
+                <a href="index.html" class="back-button">🏠 Menu Utama</a>
+            </div>
+        </header>
+
+        <!-- INTRODUCTION -->
+        <div class="slide-container">
+            <div class="slide-content">
+                <h3 style="color: #01267F; text-align: center; margin-bottom: 20px;">🔄 Workflow Lengkap Stata → Excel</h3>
+                <p style="text-align: center; margin-bottom: 25px;">Ekspor data, hasil regresi, dan tabel dari Stata ke Excel dengan format rapi.</p>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon stata-icon">S</span> Input: Stata</h4>
+                        <p>• .dta data files<br>
+                           • .do script files<br>
+                           • .log output files<br>
+                           • Statistical results</p>
+                        <p><strong>Versi:</strong> Stata 13+</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon export-icon">📤</span> Export Methods</h4>
+                        <p>• export excel<br>
+                           • esttab<br>
+                           • putexcel<br>
+                           • outsheet</p>
+                        <p><strong>Time:</strong> 5-15 menit</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon excel-icon">📊</span> Output: Excel</h4>
+                        <p>• Clean data tables<br>
+                           • Regression results<br>
+                           • Summary statistics<br>
+                           • Formatted reports</p>
+                        <p><strong>Format:</strong> .xlsx siap presentasi</p>
+                    </div>
+                </div>
+                
+                <div class="alert-box alert-info">
+                    <h4>🎯 Target Output:</h4>
+                    <p><strong>Data Sheet:</strong> Clean dataset dengan labels<br>
+                    <strong>Results Sheet:</strong> Regression coefficients dengan stars<br>
+                    <strong>Summary Sheet:</strong> Mean, SD, min, max<br>
+                    <strong>Metadata Sheet:</strong> Variable descriptions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 1: ANATOMI DO-FILE ===== -->
+        <div id="section-1" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">1</div>
+                <div class="slide-title">Anatomi Do-file Stata yang Baik</div>
+            </div>
+            <div class="slide-content">
+                <h4>📝 Struktur Do-file untuk Export ke Excel</h4>
+                
+                <div class="code-block">
+<span class="code-comment">/*==============================================</span>
+<span class="code-comment">   PROJECT: Analisis Data Survey 2023</span>
+<span class="code-comment">   AUTHOR: Tim Hilirisasi 3 - Bappenas</span>
+<span class="code-comment">   DATE: $S_DATE</span>
+<span class="code-comment">   PURPOSE: Clean data & export to Excel</span>
+<span class="code-comment">==============================================*/</span>
+
+<span class="code-comment">// 1. SETUP ENVIRONMENT</span>
+<span class="code-stata">clear all</span>
+<span class="code-stata">set more off</span>
+<span class="code-stata">set mem 500m</span>
+<span class="code-stata">cd "C:\Project\Data\"</span>
+<span class="code-stata">cap log close</span>
+<span class="code-stata">log using "analysis_$S_DATE.log", replace</span>
+
+<span class="code-comment">// 2. LOAD DATA</span>
+<span class="code-stata">use "raw/survey.dta", clear</span>
+
+<span class="code-comment">// 3. DATA CLEANING</span>
+<span class="code-stata">drop if missing(age)</span>
+<span class="code-stata">replace income = . if income < 0</span>
+<span class="code-stata">gen ln_income = log(income)</span>
+<span class="code-stata">label variable ln_income "Log of Income"</span>
+
+<span class="code-comment">// 4. ANALYSIS</span>
+<span class="code-stata">summarize age income education</span>
+<span class="code-stata">regress income age education</span>
+
+<span class="code-comment">// 5. EXPORT TO EXCEL</span>
+<span class="code-stata">export excel using "output.xlsx", firstrow(variables) replace</span>
+
+<span class="code-comment">// 6. FINISH</span>
+<span class="code-stata">log close</span>
+<span class="code-stata">di "Analysis complete. Output saved as output.xlsx"</span>
+                </div>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon stata-icon">🔧</span> Essential Sections</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Setup:</strong> clear, memory, path, log</li>
+                            <li><strong>Data Loading:</strong> use, import</li>
+                            <li><strong>Cleaning:</strong> drop, replace, gen</li>
+                            <li><strong>Analysis:</strong> summarize, regress</li>
+                            <li><strong>Export:</strong> export, esttab, putexcel</li>
+                            <li><strong>Cleanup:</strong> log close, save</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon data-icon">🎯</span> What to Export</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Cleaned dataset</strong> (final .dta)</li>
+                            <li><strong>Summary statistics</strong> tables</li>
+                            <li><strong>Regression results</strong> with stars</li>
+                            <li><strong>Correlation matrices</strong></li>
+                            <li><strong>Frequency tables</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon export-icon">📋</span> Export Commands</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><code>export excel</code> - data values</li>
+                            <li><code>esttab</code> - regression tables</li>
+                            <li><code>putexcel</code> - formatted tables</li>
+                            <li><code>logout</code> - summary stats</li>
+                            <li><code>outsheet</code> - CSV format</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 2: DATA .DTA FORMAT ===== -->
+        <div id="section-2" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">2</div>
+                <div class="slide-title">Memahami Format Data .dta Stata</div>
+            </div>
+            <div class="slide-content">
+                <h4>🗃️ Struktur Internal File .dta</h4>
+                
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📊 Komponen File .dta:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Component</th>
+                            <th>Content</th>
+                            <th>Export Issue</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td>Data Values</td>
+                            <td>Actual data numbers/text</td>
+                            <td>Exported correctly</td>
+                            <td>No action needed</td>
+                        </tr>
+                        <tr>
+                            <td>Variable Labels</td>
+                            <td>Descriptive names</td>
+                            <td>Often lost</td>
+                            <td>Use <code>decode()</code> or manual</td>
+                        </tr>
+                        <tr>
+                            <td>Value Labels</td>
+                            <td>1=Male, 2=Female</td>
+                            <td>Lost in export</td>
+                            <td><code>decode()</code> before export</td>
+                        </tr>
+                        <tr>
+                            <td>Date Formats</td>
+                            <td>Stata date numbers</td>
+                            <td>Wrong format in Excel</td>
+                            <td>Convert in Stata or Excel</td>
+                        </tr>
+                        <tr>
+                            <td>Missing Values</td>
+                            <td>. , .a, .b, .c</td>
+                            <td>Appear as "."</td>
+                            <td>Handle in Stata or Excel</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// CHECK DATA STRUCTURE BEFORE EXPORT</span>
+<span class="code-stata">describe</span>          <span class="code-comment">// List variables and labels</span>
+<span class="code-stata">codebook</span>          <span class="code-comment">// Detailed variable info</span>
+<span class="code-stata">label list</span>        <span class="code-comment">// Show all value labels</span>
+<span class="code-stata">format</span>            <span class="code-comment">// Check date formats</span>
+<span class="code-stata">missings report</span>   <span class="code-comment">// Check missing values</span>
+
+<span class="code-comment">// FIX COMMON ISSUES BEFORE EXPORT</span>
+<span class="code-stata">decode gender, gen(gender_str)</span>     <span class="code-comment">// Convert labeled var to string</span>
+<span class="code-stata">format date %td</span>                      <span class="code-comment">// Format dates</span>
+<span class="code-stata">replace var = . if var == .a</span>        <span class="code-comment">// Standardize missing values</span>
+<span class="code-stata">drop if missing(key_var)</span>           <span class="code-comment">// Remove obs with missing key var</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 3: OUTPUT STATA ===== -->
+        <div id="section-3" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">3</div>
+                <div class="slide-title">Jenis Output Stata untuk Ekspor</div>
+            </div>
+            <div class="slide-content">
+                <h4>📤 Apa yang Bisa Diekspor dari Stata?</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon data-icon">📁</span> Raw Data</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Dataset lengkap</strong> (.dta)</li>
+                            <li><strong>Subset data</strong> dengan filter</li>
+                            <li><strong>Transformed data</strong> hasil cleaning</li>
+                            <li><strong>Aggregated data</strong> group by</li>
+                        </ul>
+                        <p><strong>Command:</strong> <code>export excel</code></p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon regression-icon">📈</span> Analysis Results</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Regression tables</strong></li>
+                            <li><strong>Summary statistics</strong></li>
+                            <li><strong>Correlation matrices</strong></li>
+                            <li><strong>Test results</strong> (t-test, chi2)</li>
+                            <li><strong>ANOVA tables</strong></li>
+                        </ul>
+                        <p><strong>Command:</strong> <code>esttab</code>, <code>logout</code></p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon export-icon">📋</span> Formatted Reports</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Publication tables</strong></li>
+                            <li><strong>Formatted summaries</strong></li>
+                            <li><strong>Custom layouts</strong></li>
+                            <li><strong>Multiple sheets</strong></li>
+                            <li><strong>Charts & graphs</strong></li>
+                        </ul>
+                        <p><strong>Command:</strong> <code>putexcel</code></p>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🎯 Prioritas Ekspor:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Priority</th>
+                            <th>Output Type</th>
+                            <th>Command</th>
+                            <th>Excel Sheet</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Cleaned dataset</td>
+                            <td><code>export excel</code></td>
+                            <td>Data</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Summary stats</td>
+                            <td><code>logout</code> or <code>tabstat</code></td>
+                            <td>Summary</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Regression results</td>
+                            <td><code>esttab</code></td>
+                            <td>Regression</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Formatted tables</td>
+                            <td><code>putexcel</code></td>
+                            <td>Results</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 4: EXPORT EXCEL ===== -->
+        <div id="section-4" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">4</div>
+                <div class="slide-title">Metode 1: export excel (Paling Mudah)</div>
+            </div>
+            <div class="slide-content">
+                <h4>📤 Ekspor Dataset Lengkap ke Excel</h4>
+                
+                <div class="stata-table">
+                    <h5>📝 Basic Syntax:</h5>
+                    <div class="stata-command">export excel using "filename.xlsx", firstrow(variables) replace</div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// BASIC EXPORT - SEMUA DATA</span>
+<span class="code-stata">export excel using "data_output.xlsx", firstrow(variables) replace</span>
+
+<span class="code-comment">// EXPORT DENGAN PILIHAN KOLOM</span>
+<span class="code-stata">export excel id age income education using "subset.xlsx", ///</span>
+<span class="code-stata">    firstrow(variables) sheet("Survey_Data") replace</span>
+
+<span class="code-comment">// EXPORT KE SHEET TERTENTU DAN POSISI</span>
+<span class="code-stata">export excel using "results.xlsx", ///</span>
+<span class="code-stata">    firstrow(variables) sheet("Data") cell(A5) replace</span>
+
+<span class="code-comment">// EXPORT TANPA LABEL VALUE (hanya kode)</span>
+<span class="code-stata">export excel using "data_nolabel.xlsx", firstrow(variables) nolabel replace</span>
+
+<span class="code-comment">// EXPORT MULTIPLE SHEETS</span>
+<span class="code-stata">export excel using "full_report.xlsx", firstrow(variables) sheet("Data") replace</span>
+<span class="code-stata">export excel region sales using "full_report.xlsx", ///</span>
+<span class="code-stata">    firstrow(variables) sheet("Summary") replace</span>
+                </div>
+                
+                <div class="alert-box alert-info">
+                    <h4>⚡ Tips export excel:</h4>
+                    <p>1. <strong>Gunakan <code>firstrow(variables)</code></strong> untuk header<br>
+                    2. <strong>Selalu pakai <code>replace</code></strong> untuk overwrite file lama<br>
+                    3. <strong>Specify sheet name</strong> untuk organisasi yang rapi<br>
+                    4. <strong>Untuk value labels</strong>, gunakan <code>decode()</code> sebelum export<br>
+                    5. <strong>Untuk missing values</strong>, handle di Stata sebelum export</p>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🔧 Pre-Export Checklist:</h4>
+                    <ol>
+                        <li><strong>Check data types</strong> - numeric vs string</li>
+                        <li><strong>Handle missing values</strong> - . menjadi blank atau 0</li>
+                        <li><strong>Convert labeled variables</strong> - gunakan <code>decode()</code></li>
+                        <li><strong>Format dates</strong> - Stata dates → Excel dates</li>
+                        <li><strong>Remove unnecessary variables</strong> - kurangi file size</li>
+                        <li><strong>Sort data jika perlu</strong> - untuk presentasi rapi</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 5: ESTTAB / ESTOUT ===== -->
+        <div id="section-5" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Metode 2: esttab untuk Regression Tables</div>
+            </div>
+            <div class="slide-content">
+                <h4>📈 Ekspor Hasil Regresi Profesional</h4>
+                
+                <div class="stata-table">
+                    <h5>📦 Install Package:</h5>
+                    <div class="stata-command">ssc install estout, replace</div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// INSTALL PACKAGE (jika belum)</span>
+<span class="code-stata">ssc install estout, replace</span>
+
+<span class="code-comment">// RUN REGRESSIONS</span>
+<span class="code-stata">regress income age education</span>
+<span class="code-stata">estimates store model1</span>
+
+<span class="code-stata">regress income age education experience</span>
+<span class="code-stata">estimates store model2</span>
+
+<span class="code-comment">// EXPORT KE EXCEL - BASIC</span>
+<span class="code-stata">esttab model1 model2 using "regression_results.xlsx", replace</span>
+
+<span class="code-comment">// EXPORT DENGAN FORMATTING LENGKAP</span>
+<span class="code-stata">esttab model1 model2 using "regression_full.xlsx", replace ///</span>
+<span class="code-stata">    b(3) se(3) ///                    // 3 decimal places</span>
+<span class="code-stata">    star(* 0.1 ** 0.05 *** 0.01) ///  // Significance stars</span>
+<span class="code-stata">    r2 ar2 ///                        // R-squared stats</span>
+<span class="code-stata">    scalar(N F) ///                   // N and F-stat</span>
+<span class="code-stata">    title("Regression Results") ///    // Title</span>
+<span class="code-stata">    mtitles("Model 1" "Model 2")      // Model titles</span>
+
+<span class="code-comment">// EXPORT UNTUK PUBLIKASI</span>
+<span class="code-stata">esttab model1 model2 using "pub_ready.xlsx", replace ///</span>
+<span class="code-stata">    cells(b(star fmt(3)) se(par fmt(3))) ///</span>
+<span class="code-stata">    stats(N r2_a, fmt(0 3) labels("Observations" "Adjusted R-squared")) ///</span>
+<span class="code-stata">    varwidth(20) ///</span>
+<span class="code-stata">    title("Table 1: Regression Analysis")</span>
+                </div>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon regression-icon">🎯</span> Key Options</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><code>b(3)</code> - 3 decimal coefficients</li>
+                            <li><code>se(3)</code> - 3 decimal std errors</li>
+                            <li><code>star()</code> - significance stars</li>
+                            <li><code>r2 ar2</code> - R-squared stats</li>
+                            <li><code>scalar(N)</code> - observations</li>
+                            <li><code>title()</code> - table title</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon export-icon">📊</span> Output Types</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>.xlsx</strong> - Excel format</li>
+                            <li><strong>.rtf</strong> - Word format</li>
+                            <li><strong>.tex</strong> - LaTeX format</li>
+                            <li><strong>.csv</strong> - CSV format</li>
+                            <li><strong>.html</strong> - Web format</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 6: PUTEXCEL ===== -->
+        <div id="section-6" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">6</div>
+                <div class="slide-title">Metode 3: putexcel untuk Formatting Lengkap</div>
+            </div>
+            <div class="slide-content">
+                <h4>🎨 Ekspor dengan Formatting Excel</h4>
+                
+                <div class="stata-table">
+                    <h5>📝 Basic putexcel Workflow:</h5>
+                    <div class="stata-command">putexcel set "filename.xlsx", replace</div>
+                    <div class="stata-command">putexcel A1 = "Title"</div>
+                    <div class="stata-command">putexcel A2 = matrix(results)</div>
+                    <div class="stata-command">putexcel save</div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// EXAMPLE 1: SUMMARY STATISTICS TABLE</span>
+<span class="code-stata">summarize age income education, detail</span>
+<span class="code-stata">matrix summ = r(StatTotal)'</span>
+
+<span class="code-stata">putexcel set "summary_stats.xlsx", replace</span>
+<span class="code-stata">putexcel A1 = "Summary Statistics"</span>
+<span class="code-stata">putexcel A2 = matrix(summ), names</span>
+<span class="code-stata">putexcel A1, bold border(bottom)</span>
+<span class="code-stata">putexcel A2:C10, nformat(number_d2)</span>
+<span class="code-stata">putexcel save</span>
+
+<span class="code-comment">// EXAMPLE 2: REGRESSION RESULTS WITH FORMATTING</span>
+<span class="code-stata">regress income age education</span>
+<span class="code-stata">matrix b = e(b)</span>
+<span class="code-stata">matrix V = e(V)</span>
+
+<span class="code-stata">putexcel set "regression_formatted.xlsx", replace</span>
+<span class="code-stata">putexcel A1 = "Variable" B1 = "Coefficient" C1 = "Std. Error" D1 = "t-stat"</span>
+<span class="code-stata">putexcel A2 = matrix(b)', transpose</span>
+<span class="code-stata">putexcel C2 = matrix(sqrt(diag(V)))', transpose</span>
+<span class="code-stata">putexcel D2 = formula(C2/B2)</span>
+<span class="code-stata">putexcel A1:D1, bold border(bottom)</span>
+<span class="code-stata">putexcel B2:D10, nformat(number_0.000)</span>
+<span class="code-stata">putexcel save</span>
+
+<span class="code-comment">// EXAMPLE 3: MULTIPLE SHEETS</span>
+<span class="code-stata">putexcel set "full_report.xlsx", sheet("Data") replace</span>
+<span class="code-stata">putexcel A1 = matrix(data_matrix)</span>
+<span class="code-stata">putexcel set "full_report.xlsx", sheet("Results") modify</span>
+<span class="code-stata">putexcel A1 = matrix(results_matrix)</span>
+<span class="code-stata">putexcel save</span>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>✨ putexcel Formatting Options:</h4>
+                    <p><strong>Text formatting:</strong> <code>bold</code>, <code>italic</code>, <code>underline</code><br>
+                    <strong>Border:</strong> <code>border(top)</code>, <code>border(bottom, thick)</code><br>
+                    <strong>Number format:</strong> <code>nformat(number_d2)</code>, <code>nformat(currency)</code><br>
+                    <strong>Alignment:</strong> <code>halign(center)</code>, <code>valign(middle)</code><br>
+                    <strong>Fill color:</strong> <code>fgcolor(yellow)</code>, <code>bgcolor(blue)</code><br>
+                    <strong>Font:</strong> <code>font(..., 12)</code>, <code>font(..., "Arial")</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 7: IMPORT KE EXCEL ===== -->
+        <div id="section-7" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">7</div>
+                <div class="slide-title">Import File Stata ke Excel</div>
+            </div>
+            <div class="slide-content">
+                <h4>📥 Cara Import .dta dan .xlsx ke Excel</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon excel-icon">📊</span> Metode 1: Direct Import .xlsx</h4>
+                        <p><strong>Jika sudah export dari Stata:</strong></p>
+                        <ol>
+                            <li>Double-click file .xlsx</li>
+                            <li>Excel langsung terbuka</li>
+                            <li>Data sudah dalam format Excel</li>
+                            <li>Siap untuk analysis lebih lanjut</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon stata-icon">↔️</span> Metode 2: Import .dta ke Excel</h4>
+                        <p><strong>Menggunakan Power Query:</strong></p>
+                        <ol>
+                            <li>Excel → Data tab → Get Data</li>
+                            <li>From File → From Stata (.dta)</li>
+                            <li>Butuh: "Stata file reader" add-in</li>
+                            <li>Power Query import dengan labels</li>
+                            <li>Transform jika perlu</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon data-icon">📁</span> Metode 3: CSV Intermediate</h4>
+                        <p><strong>Jika tidak bisa direct:</strong></p>
+                        <ol>
+                            <li>Stata: <code>outsheet using "data.csv"</code></li>
+                            <li>Excel: Data → From Text/CSV</li>
+                            <li>Pilih file CSV</li>
+                            <li>Transform di Power Query</li>
+                            <li>Save as .xlsx</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🔧 Power Query untuk Import Stata Output:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Issue</th>
+                            <th>Symptom</th>
+                            <th>Power Query Solution</th>
+                        </tr>
+                        <tr>
+                            <td>Missing values</td>
+                            <td>"." muncul di Excel</td>
+                            <td>Replace "." with null</td>
+                        </tr>
+                        <tr>
+                            <td>Date formats</td>
+                            <td>Numbers bukan dates</td>
+                            <td>Add custom column: Date + number</td>
+                        </tr>
+                        <tr>
+                            <td>Label codes</td>
+                            <td>1,2 bukan Male,Female</td>
+                            <td>Conditional column: if 1 then "Male"</td>
+                        </tr>
+                        <tr>
+                            <td>Scientific notation</td>
+                            <td>1.23E+10</td>
+                            <td>Change data type to text</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 8: CLEANING DATA ===== -->
+        <div id="section-8" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">8</div>
+                <div class="slide-title">Cleaning Data Stata di Excel</div>
+            </div>
+            <div class="slide-content">
+                <h4>🧹 Handle Common Stata Export Issues</h4>
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ Masalah Umum Stata → Excel:</h4>
+                    <p>• <strong>Missing values</strong> → "." muncul sebagai teks<br>
+                    • <strong>Label values</strong> → hanya kode numeric (1,2)<br>
+                    • <strong>Date values</strong> → Stata date numbers<br>
+                    • <strong>String whitespace</strong> → spasi di awal/akhir<br>
+                    • <strong>Scientific notation</strong> → untuk angka besar</p>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// EXCEL FORMULAS UNTUK CLEANING:</span>
+
+<span class="code-comment">// 1. HANDLE MISSING VALUES (Stata's ".")</span>
+<span class="code-string">=IF(A2=".", "", A2)</span>
+
+<span class="code-comment">// 2. CONVERT STATA DATE TO EXCEL DATE</span>
+<span class="code-comment">// Stata: days since 01jan1960</span>
+<span class="code-string">=DATE(1960,1,1) + A2</span>
+<span class="code-comment">// Kemudian format sebagai date</span>
+
+<span class="code-comment">// 3. CONVERT LABEL CODES TO TEXT</span>
+<span class="code-string">=IF(B2=1, "Male", IF(B2=2, "Female", "Unknown"))</span>
+
+<span class="code-comment">// 4. TRIM WHITESPACE</span>
+<span class="code-string">=TRIM(A2)</span>
+
+<span class="code-comment">// 5. FIX SCIENTIFIC NOTATION</span>
+<span class="code-string">=TEXT(A2, "0")</span>
+
+<span class="code-comment">// 6. HANDLE SPECIAL MISSING (.a, .b, .c)</span>
+<span class="code-string">=IF(OR(A2=".a", A2=".b", A2=".c"), "Missing", A2)</span>
+                </div>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon stata-icon">🔧</span> Cleaning di Stata (Better)</h4>
+                        <ul style="margin-top: 10px;">
+                            <li><code>decode gender, gen(gender_str)</code></li>
+                            <li><code>format date %td</code></li>
+                            <li><code>mvdecode _all, mv(.)</code></li>
+                            <li><code>destring, replace</code></li>
+                            <li><code>tostring, replace format()</code></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon excel-icon">📝</span> Cleaning di Excel</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Find & Replace "." → blank</li>
+                            <li>Text to Columns</li>
+                            <li>Flash Fill untuk patterns</li>
+                            <li>Power Query transformations</li>
+                            <li>Conditional formatting</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon data-icon">🎨</span> Formatting Excel</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Table formatting</li>
+                            <li>Number formatting</li>
+                            <li>Date formatting</li>
+                            <li>Conditional formatting</li>
+                            <li>Data validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 9: FORMATTING EXCEL ===== -->
+        <div id="section-9" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">9</div>
+                <div class="slide-title">Formatting Excel untuk Presentasi</div>
+            </div>
+            <div class="slide-content">
+                <h4>🎨 Membuat Excel Output Profesional</h4>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📋 Template Excel Structure:</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <h5>Sheet 1: Cover</h5>
+                            <ul>
+                                <li>Project title</li>
+                                <li>Analyst name</li>
+                                <li>Date created</li>
+                                <li>Version number</li>
+                                <li>Update history</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5>Sheet 2: Data Dictionary</h5>
+                            <ul>
+                                <li>Variable names</li>
+                                <li>Descriptions</li>
+                                <li>Data types</li>
+                                <li>Value labels</li>
+                                <li>Source information</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5>Sheet 3: Clean Data</h5>
+                            <ul>
+                                <li>Final dataset</li>
+                                <li>Formatted as Table</li>
+                                <li>Filters enabled</li>
+                                <li>Proper data types</li>
+                                <li>Conditional formatting</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <h5>Sheet 4: Summary Stats</h5>
+                            <ul>
+                                <li>Mean, SD, min, max</li>
+                                <li>Frequency tables</li>
+                                <li>Correlation matrix</li>
+                                <li>Missing values report</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5>Sheet 5: Regression</h5>
+                            <ul>
+                                <li>Coefficient tables</li>
+                                <li>Model diagnostics</li>
+                                <li>Goodness of fit</li>
+                                <li>Marginal effects</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h5>Sheet 6: Appendix</h5>
+                            <ul>
+                                <li>Methodology notes</li>
+                                <li>Assumptions</li>
+                                <li>Limitations</li>
+                                <li>References</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>✨ Professional Excel Formatting:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Element</th>
+                            <th>Best Practice</th>
+                            <th>Excel Feature</th>
+                        </tr>
+                        <tr>
+                            <td>Tables</td>
+                            <td>Use Table formatting</td>
+                            <td>Insert → Table</td>
+                        </tr>
+                        <tr>
+                            <td>Numbers</td>
+                            <td>Consistent decimal places</td>
+                            <td>Number formatting</td>
+                        </tr>
+                        <tr>
+                            <td>Dates</td>
+                            <td>Regional date format</td>
+                            <td>Custom date format</td>
+                        </tr>
+                        <tr>
+                            <td>Colors</td>
+                            <td>Use accessible color palette</td>
+                            <td>Conditional formatting</td>
+                        </tr>
+                        <tr>
+                            <td>Headers</td>
+                            <td>Freeze panes for scrolling</td>
+                            <td>View → Freeze Panes</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 10: TEMPLATE DO-FILE ===== -->
+        <div id="section-10" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">10</div>
+                <div class="slide-title">Template Do-file untuk Auto Export</div>
+            </div>
+            <div class="slide-content">
+                <h4>⚡ Do-file Template Siap Pakai</h4>
+                
+                <div class="code-block">
+<span class="code-comment">/*==============================================</span>
+<span class="code-comment">   TEMPLATE: STATA TO EXCEL AUTO-EXPORT</span>
+<span class="code-comment">   TIM HILIRISASI 3 - BAPPENAS</span>
+<span class="code-comment">   DATE: $S_DATE</span>
+<span class="code-comment">==============================================*/</span>
+
+<span class="code-comment">// 1. SETUP</span>
+<span class="code-stata">clear all</span>
+<span class="code-stata">set more off</span>
+<span class="code-stata">cap log close</span>
+<span class="code-stata">log using "analysis_$S_DATE.log", replace</span>
+<span class="code-stata">cd "C:\Project\"</span>
+
+<span class="code-comment">// 2. DEFINE OUTPUT FILES</span>
+<span class="code-stata">global output_file "stata_output_$S_DATE.xlsx"</span>
+<span class="code-stata">global data_file "clean_data_$S_DATE.xlsx"</span>
+<span class="code-stata">global results_file "regression_results_$S_DATE.xlsx"</span>
+
+<span class="code-comment">// 3. LOAD AND CLEAN DATA</span>
+<span class="code-stata">use "raw/survey.dta", clear</span>
+
+<span class="code-comment">// Data cleaning steps</span>
+<span class="code-stata">drop if missing(id)</span>
+<span class="code-stata">replace income = . if income < 0</span>
+<span class="code-stata">decode gender, gen(gender_str)</span>
+<span class="code-stata">drop gender</span>
+<span class="code-stata">rename gender_str gender</span>
+
+<span class="code-comment">// 4. EXPORT CLEAN DATA</span>
+<span class="code-stata">export excel using "$data_file", ///</span>
+<span class="code-stata">    sheet("Clean_Data") firstrow(variables) replace</span>
+
+<span class="code-comment">// 5. SUMMARY STATISTICS</span>
+<span class="code-stata">logout, save("temp_summary") excel replace: ///</span>
+<span class="code-stata">    summarize age income education, detail</span>
+
+<span class="code-comment">// 6. REGRESSION ANALYSIS</span>
+<span class="code-stata">regress income age education</span>
+<span class="code-stata">estimates store model1</span>
+
+<span class="code-stata">regress income age education experience</span>
+<span class="code-stata">estimates store model2</span>
+
+<span class="code-comment">// 7. EXPORT REGRESSION RESULTS</span>
+<span class="code-stata">esttab model1 model2 using "$results_file", replace ///</span>
+<span class="code-stata">    b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///</span>
+<span class="code-stata">    r2 ar2 scalar(N) title("Regression Results")</span>
+
+<span class="code-comment">// 8. COMBINE ALL OUTPUTS</span>
+<span class="code-comment">// (Manual step: copy sheets to master file)</span>
+
+<span class="code-comment">// 9. FINISH</span>
+<span class="code-stata">log close</span>
+<span class="code-stata">di "=========================================="</span>
+<span class="code-stata">di "ANALYSIS COMPLETE"</span>
+<span class="code-stata">di "Output files created:"</span>
+<span class="code-stata">di "1. Clean data: $data_file"</span>
+<span class="code-stata">di "2. Results: $results_file"</span>
+<span class="code-stata">di "3. Log file: analysis_$S_DATE.log"</span>
+<span class="code-stata">di "=========================================="</span>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>✅ Template Features:</h4>
+                    <p>• <strong>Automatic date-stamping</strong> in filenames<br>
+                    • <strong>Comprehensive logging</strong> for reproducibility<br>
+                    • <strong>Separate files</strong> for data and results<br>
+                    • <strong>Professional formatting</strong> options<br>
+                    • <strong>Error handling</strong> with <code>cap</code> command<br>
+                    • <strong>Clear completion message</strong> with file list</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 11: TROUBLESHOOTING ===== -->
+        <div id="section-11" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">11</div>
+                <div class="slide-title">Troubleshooting Common Issues</div>
+            </div>
+            <div class="slide-content">
+                <h4>🔧 Solusi Masalah Ekspor Stata</h4>
+                
+                <div style="background: #ffebee; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #c62828;">❌ Common Errors & Solutions:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Error</th>
+                            <th>Cause</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td>"export excel not found"</td>
+                            <td>Stata version < 13</td>
+                            <td>Use <code>outsheet</code> or upgrade</td>
+                        </tr>
+                        <tr>
+                            <td>"file already exists"</td>
+                            <td>File not replaced</td>
+                            <td>Add <code>replace</code> option</td>
+                        </tr>
+                        <tr>
+                            <td>Labels not exported</td>
+                            <td>export excel doesn't export labels</td>
+                            <td>Use <code>decode()</code> before export</td>
+                        </tr>
+                        <tr>
+                            <td>Excel file corrupt</td>
+                            <td>Export interrupted</td>
+                            <td>Use CSV intermediate</td>
+                        </tr>
+                        <tr>
+                            <td>"esttab not found"</td>
+                            <td>Package not installed</td>
+                            <td><code>ssc install estout</code></td>
+                        </tr>
+                        <tr>
+                            <td>Date format wrong</td>
+                            <td>Stata dates are numeric</td>
+                            <td>Convert in Stata or Excel</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon stata-icon">🔍</span> Debugging Tips</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Check Stata version: <code>version</code></li>
+                            <li>Test with small dataset first</li>
+                            <li>Export to CSV as backup</li>
+                            <li>Use <code>log</code> to track issues</li>
+                            <li>Verify data before export</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon excel-icon">🔄</span> Alternative Methods</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Use <code>outsheet</code> for CSV</li>
+                            <li>Copy-paste from Results window</li>
+                            <li>Use <code>list</code> with output capture</li>
+                            <li>Export matrices with <code>matwrite</code></li>
+                            <li>Use third-party tools (Stat/Transfer)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon data-icon">📁</span> File Management</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Backup original .dta files</li>
+                            <li>Use version control in filenames</li>
+                            <li>Organize by date/project</li>
+                            <li>Document all export steps</li>
+                            <li>Keep log files for audit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 12: TOOLS & TEMPLATE ===== -->
+        <div id="section-12" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">12</div>
+                <div class="slide-title">Tools & Template Siap Pakai</div>
+            </div>
+            <div class="slide-content">
+                <h4>🛠️ Resource Package untuk Stata → Excel</h4>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📁 Download Package:</h4>
+                    <div class="method-cards">
+                        <div class="method-card">
+                            <h4><span class="icon stata-icon">📝</span> Do-file Templates</h4>
+                            <p><strong>Includes:</strong></p>
+                            <ul>
+                                <li>Basic export template</li>
+                                <li>Regression export template</li>
+                                <li>Summary stats template</li>
+                                <li>Full workflow template</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>stata_export_templates.zip</em></p>
+                        </div>
+                        
+                        <div class="method-card">
+                            <h4><span class="icon excel-icon">📊</span> Excel Templates</h4>
+                            <p><strong>Includes:</strong></p>
+                            <ul>
+                                <li>Formatted report template</li>
+                                <li>Data dictionary template</li>
+                                <li>Regression table template</li>
+                                <li>Summary stats template</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>excel_report_templates.xlsx</em></p>
+                        </div>
+                        
+                        <div class="method-card">
+                            <h4><span class="icon data-icon">📋</span> Documentation</h4>
+                            <p><strong>Includes:</strong></p>
+                            <ul>
+                                <li>Step-by-step guide</li>
+                                <li>Troubleshooting manual</li>
+                                <li>Best practices checklist</li>
+                                <li>Example datasets</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>stata_excel_guide.pdf</em></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>🎉 Workflow Lengkap Stata → Excel:</h4>
+                    <p>1. <strong>Prepare Do-file</strong> dengan export commands<br>
+                    2. <strong>Clean Data</strong> di Stata sebelum export<br>
+                    3. <strong>Export Data</strong> menggunakan metode yang sesuai<br>
+                    4. <strong>Import ke Excel</strong> dengan proper formatting<br>
+                    5. <strong>Clean in Excel</strong> handle remaining issues<br>
+                    6. <strong>Format Report</strong> untuk presentasi profesional<br>
+                    7. <strong>Document</strong> semua steps untuk reproducibility</p>
+                </div>
+                
+                <div class="slide-navigation">
+                    <button class="nav-button" onclick="window.location.href='index.html'">🏠 Menu Utama</button>
+                    <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">📚 Menu Panduan</button>
+                    <button class="nav-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Ke Atas</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>&copy; 2024 Tim Hilirisasi 3 - Dit. PHKEI - Kementerian PPN/Bappenas</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: rgba(255, 255, 255, 0.6);">
+                Panduan lengkap konversi data dan hasil analisis dari Stata ke Excel
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        // Navigation Pane Highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.slide-container');
+            
+            // Highlight active section in nav
+            function highlightNav() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNav);
+            
+            // Set first nav link as active initially
+            navLinks[0].classList.add('active');
+        });
+        
+        // Smooth scroll to sections
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Navigation Pane smooth scroll
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

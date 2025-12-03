@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PDF to Excel - Panduan Teknis</title>
+    <title>Panduan Lengkap PDF ke Excel - Tim Hilirisasi 3</title>
     <style>
         * {
             margin: 0;
@@ -10,25 +10,103 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
             background: linear-gradient(135deg, #01267F 0%, #001a4d 100%);
             color: white;
             min-height: 100vh;
+            display: flex;
+        }
+        
+        /* ===== NAVIGATION PANE ===== */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-title {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link.active {
+            background: rgba(1, 38, 127, 0.5);
+            color: white;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .nav-section {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 10px 15px;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: calc(100% - 280px);
         }
         
         .header {
             background: rgba(255, 255, 255, 0.95);
-            padding: 25px 0;
+            padding: 25px 40px;
+            border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
         
         .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
         .logo-section {
@@ -51,64 +129,48 @@
         
         .title-section h1 {
             color: #01267F;
-            font-size: 1.5em;
+            font-size: 1.8em;
             margin-bottom: 5px;
         }
         
         .title-section p {
             color: #666;
-            font-size: 0.9em;
+            font-size: 1em;
         }
         
         .back-button {
             background: #01267F;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            white-space: nowrap;
         }
         
         .back-button:hover {
             background: #001a4d;
+            transform: translateY(-2px);
         }
         
-        .main-content {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        
-        .guide-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .guide-title h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-        }
-        
-        .guide-title p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        /* Slide Styles */
+        /* ===== SLIDE STYLES ===== */
         .slide-container {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
             color: #01267F;
+            scroll-margin-top: 20px;
         }
         
         .slide-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #01267F;
@@ -125,76 +187,139 @@
             justify-content: center;
             font-weight: bold;
             font-size: 1.2em;
+            flex-shrink: 0;
         }
         
         .slide-title {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
             color: #01267F;
-            flex-grow: 1;
             margin-left: 15px;
+            flex-grow: 1;
         }
         
         .slide-content {
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 1.05em;
         }
         
-        .slide-content ol {
-            margin-left: 20px;
+        .slide-content ol, .slide-content ul {
+            margin-left: 25px;
             margin-bottom: 20px;
         }
         
         .slide-content li {
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 12px;
+            padding-left: 5px;
         }
         
-        .image-placeholder {
-            background: #f8f9fa;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            margin: 20px 0;
-            color: #666;
-            font-style: italic;
-        }
-
         .image-container {
             width: 100%;
-            height: 400px; /* Atau tinggi yang diinginkan */
             max-width: 900px;
-            margin: 20px auto;
+            margin: 25px auto;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            overflow: hidden; /* Penting! */
+            overflow: hidden;
             background: #f8f9fa;
         }
-
+        
         .image-container img {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* Gambar akan memenuhi kotak */
+            height: auto;
             display: block;
         }
         
-        .tips-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196F3;
-            padding: 15px 20px;
+        .image-caption {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+        
+        /* ===== ALERT BOXES ===== */
+        .alert-box {
+            padding: 20px;
+            border-radius: 8px;
             margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            border-left: 4px solid;
         }
         
-        .tips-box h4 {
-            color: #1976D2;
-            margin-bottom: 5px;
+        .alert-info {
+            background: #e3f2fd;
+            border-left-color: #2196F3;
         }
         
-        .navigation {
+        .alert-warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            border-left-color: #4CAF50;
+        }
+        
+        .alert-danger {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        .alert-box h4 {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        /* ===== QUICK TIPS ===== */
+        .quick-tips {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .quick-tips h4 {
+            color: #01267F;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== TABLES ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .data-table th {
+            background: #01267F;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        /* ===== NAVIGATION BUTTONS ===== */
+        .slide-navigation {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
         
         .nav-button {
@@ -215,29 +340,42 @@
             transform: translateY(-2px);
         }
         
-        .nav-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
+        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             padding: 30px 20px;
             background: rgba(0, 0, 0, 0.2);
             margin-top: 50px;
+            border-radius: 12px;
         }
         
         .footer p {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9em;
+            font-size: 0.95em;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: 300px;
+            }
+            
+            .main-content {
+                max-width: 100%;
+            }
         }
         
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 15px;
             }
             
             .slide-header {
@@ -246,486 +384,1147 @@
                 gap: 15px;
             }
             
-            .navigation {
+            .slide-title {
+                margin-left: 0;
+                text-align: center;
+            }
+            
+            .slide-navigation {
                 flex-direction: column;
                 gap: 10px;
             }
             
             .nav-button {
+                width: 100%;
                 text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <img src="Logo.jpeg" alt="Logo Tim H3" class="logo">
-                <div class="title-section">
-                    <h1>PDF to Excel</h1>
-                    <p>Panduan Konversi File PDF ke Excel</p>
-                </div>
-            </div>
-            <a href="panduan-teknis.html" class="back-button">← Kembali ke Panduan</a>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="guide-title">
-            <h1>Panduan Konversi PDF ke Excel</h1>
-            <p>Step-by-step menggunakan iLovePDF untuk data statistik</p>
+    <!-- ===== NAVIGATION PANE ===== -->
+        <!-- ===== NAVIGATION PANE ===== -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">📋 Panduan PDF ke Excel</div>
+            <div class="sidebar-subtitle">Tim Hilirisasi 3 - Bappenas</div>
         </div>
         
-        <!-- Slide 1 -->
+        <ul class="nav-menu">
+            <li class="nav-section">A. IDENTIFIKASI PDF</li>
+            <li class="nav-item"><a href="#section-0" class="nav-link active">1. Cek Tipe PDF</a></li>
+            <li class="nav-item"><a href="#section-0b" class="nav-link">1B. PDF Scan (OCR)</a></li> <!-- TAMBAH INI -->
+            
+            <li class="nav-section">B. KONVERSI DASAR</li>
+            <li class="nav-item"><a href="#section-1" class="nav-link">2. Akses iLovePDF</a></li>
+            <li class="nav-item"><a href="#section-2" class="nav-link">3. Pilih Tool Konversi</a></li>
+            <li class="nav-item"><a href="#section-3" class="nav-link">4. Upload File PDF</a></li>
+            <li class="nav-item"><a href="#section-4" class="nav-link">5. Atur Layout Output</a></li>
+            <li class="nav-item"><a href="#section-5" class="nav-link">6. Proses & Download</a></li>
+            
+            <li class="nav-section">C. VALIDASI DATA</li>
+            <li class="nav-item"><a href="#section-6" class="nav-link">7. Struktur Tabel</a></li>
+            <li class="nav-item"><a href="#section-7" class="nav-link">8. Perbandingan Data</a></li>
+            <li class="nav-item"><a href="#section-8" class="nav-link">9. Template Standar</a></li>
+            <li class="nav-item"><a href="#section-9" class="nav-link">10. Quality Check</a></li>
+            
+            <li class="nav-section">D. DATA CLEANING</li>
+            <li class="nav-item"><a href="#section-10" class="nav-link">11. Pembersihan Data</a></li>
+            <li class="nav-item"><a href="#section-10b" class="nav-link">11B. Fix Format (SUBSTITUTE)</a></li> <!-- TAMBAH INI -->
+            <li class="nav-item"><a href="#section-11" class="nav-link">12. Tambah Metadata</a></li>
+            
+            <li class="nav-section">E. DATABASE FORMAT LONG</li>
+            <li class="nav-item"><a href="#section-12" class="nav-link">13. Struktur Database</a></li>
+            <li class="nav-item"><a href="#section-13" class="nav-link">14. Format Data Long</a></li>
+            
+            <li class="nav-section">F. KOMPILASI MULTI-TAHUN</li>
+            <li class="nav-item"><a href="#section-14" class="nav-link">15. Multi-Sumber Data</a></li>
+            <li class="nav-item"><a href="#section-15" class="nav-link">16. Template Database Final</a></li>
+            <li class="nav-item"><a href="#section-16" class="nav-link">17. Integrasi Data</a></li>
+            <li class="nav-item"><a href="#section-17" class="nav-link">18. Penyimpanan & Naming</a></li>
+        </ul>
+        
+        <div style="margin-top: 30px; padding: 15px; background: rgba(1, 38, 127, 0.1); border-radius: 8px;">
+            <div style="font-weight: bold; color: white; margin-bottom: 8px;">⏱️ Estimasi Waktu</div>
+            <div style="font-size: 0.9em; color: rgba(255, 255, 255, 0.8);">
+                • Konversi: 5-10 menit<br>
+                • Validasi: 10-15 menit<br>
+                • Cleaning: 15-30 menit<br>
+                • Kompilasi: 20-40 menit
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+            	<img src="Tim H3 (1).png" 
+     		alt="Logo Tim Hilirisasi 3" 
+     		class="logo-real" 
+    		style="width: 54px; height: auto;">
+                    <div class="title-section">
+                        <h1>Panduan Lengkap: PDF ke Excel</h1>
+                        <p>Step-by-step konversi hingga database format long</p>
+                    </div>
+                </div>
+                <a href="panduan-teknis.html" class="back-button">📚 Menu Panduan</a>
+                <a href="index.html" class="back-button">🏠 Menu Utama</a>
+            </div>
+        </header>
+
+        <!-- INTRODUCTION -->
         <div class="slide-container">
+            <div class="slide-content">
+                <h3 style="color: #01267F; text-align: center; margin-bottom: 20px;">🎯 Panduan Komprehensif untuk Semua Jenis Data</h3>
+                <p style="text-align: center; margin-bottom: 25px;">Panduan ini mencakup seluruh proses dari konversi PDF hingga pembuatan database format long yang siap untuk analisis statistik.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="text-align: center; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+                        <div style="font-size: 1.5em; margin-bottom: 10px;">📄→📊</div>
+                        <strong>Konversi PDF</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Step 1-6</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+                        <div style="font-size: 1.5em; margin-bottom: 10px;">🧹✨</div>
+                        <strong>Data Cleaning</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Step 7-12</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #fff3e0; border-radius: 8px;">
+                        <div style="font-size: 1.5em; margin-bottom: 10px;">🗃️📈</div>
+                        <strong>Format Long</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Step 13-14</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f3e5f5; border-radius: 8px;">
+                        <div style="font-size: 1.5em; margin-bottom: 10px;">🔗📊</div>
+                        <strong>Kompilasi</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Step 15-18</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 0: IDENTIFIKASI PDF ===== -->
+        <div id="section-0" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">1</div>
-                <div class="slide-title">Membuka Website iLovePDF</div>
+                <div class="slide-title">Identifikasi Tipe PDF</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Buka browser (Chrome/Edge/Firefox)</li>
-                    <li>Ketik kata kunci "ilovepdf" pada kolom pencarian Google</li>
-                    <li>Pilih hasil pertama bertuliskan "iLovePDF | Online PDF tools for PDF lovers"</li>
-                    <li>Klik link tersebut untuk masuk ke website iLovePDF</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture1.png" alt="Tampilan pencarian Google untuk iLovePDF">
+                <h4>📄 Langkah Pertama: Cek Jenis PDF</h4>
+                <p>Sebelum konversi, identifikasi apakah PDF Anda:</p>
+                
+                <div class="alert-box alert-success">
+                    <h4>✅ PDF dengan Text (Direkomendasikan)</h4>
+                    <p><strong>Ciri-ciri:</strong></p>
+                    <ul>
+                        <li>Text dapat di-select/dicopy</li>
+                        <li>Search function berjalan</li>
+                        <li>Ukuran file relatif kecil</li>
+                        <li>Konversi akurasi tinggi (>95%)</li>
+                    </ul>
+                    <p><strong>Tindakan:</strong> Lanjut ke Step 2</p>
+                </div>
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ PDF Scan/Gambar (Perlu OCR)</h4>
+                    <p><strong>Ciri-ciri:</strong></p>
+                    <ul>
+                        <li>Text tidak bisa di-select</li>
+                        <li>File seperti gambar/foto</li>
+                        <li>Ukuran file besar</li>
+                        <li>Perlu OCR (Optical Character Recognition)</li>
+                    </ul>
+                    <p><strong>Tindakan:</strong> Gunakan iLovePDF dengan opsi OCR</p>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🔍 Cara Cepat Mengecek:</h4>
+                    <ol>
+                        <li>Buka PDF di Adobe Reader/Viewer</li>
+                        <li>Coba select text dengan mouse</li>
+                        <li>Jika berhasil → PDF Text</li>
+                        <li>Jika tidak → PDF Scan/Gambar</li>
+                    </ol>
                 </div>
             </div>
         </div>
-        
-        <!-- Slide 2 -->
-        <div class="slide-container">
+
+      <!-- ===== SECTION 1B: PDF SCAN DENGAN OCR (Jika File Pdf anda adalah Hasil Scan Gambar) ===== -->
+        <div id="section-1b" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">1B</div>
+                <div class="slide-title">PDF Scan/Gambar (OCR Processing)</div>
+            </div>
+            <div class="slide-content">
+                <h4>🖼️ Khusus untuk PDF Hasil Scan/Gambar:</h4>
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ PDF Scan Detected! (Jika pdf file anda bukan hasil Scan, skip step ini)</h4>
+                    <p>File PDF Anda terdeteksi sebagai hasil scan gambar. Perlu OCR (Optical Character Recognition) untuk konversi yang akurat.</p>
+                </div>
+                
+                <h4>📋 Langkah Konversi PDF Scan di iLovePDF:</h4>
+                <ol>
+		    <li><strong>Buka Link:https://www.ilovepdf.com/ocr-pdf</li>
+                    <li><strong>Upload file PDF</strong> seperti biasa ke iLovePDF</li>
+                    <li><strong>Pilih bahasa dokumen</strong> (Indonesian/English)</li>
+                    <li><strong>Klik "Convert to EXCEL"</strong> dengan OCR aktif</li>
+		    <li><strong>Namun, jika file Anda bukan hasil Scan skip bagian ini</li>
+                </ol>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture28.png" alt="OCR Settings iLovePDF">
+                    <div class="image-caption">Gambar 1B: Pengaturan OCR untuk PDF scan/gambar</div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🔧 Tips untuk PDF Scan:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Masalah</th>
+                            <th>Solusi</th>
+                            <th>Akurasi</th>
+                        </tr>
+                        <tr>
+                            <td>Text miring/skew</td>
+                            <td>Rotate sebelum scan</td>
+                            <td>90%</td>
+                        </tr>
+                        <tr>
+                            <td>Low resolution</td>
+                            <td>Scan min 300 DPI</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>Background noise</td>
+                            <td>Clean scan area</td>
+                            <td>95%</td>
+                        </tr>
+                        <tr>
+                            <td>Handwritten notes</td>
+                            <td>Manual entry</td>
+                            <td>60%</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="alert-box alert-info">
+                    <h4>📊 Perbandingan Akurasi:</h4>
+                    <p><strong>PDF Text:</strong> 95-99% akurasi<br>
+                    <strong>PDF Scan + OCR:</strong> 85-95% akurasi<br>
+                    <strong>PDF Foto:</strong> 70-85% akurasi</p>
+                    <p><em>Selalu validasi data setelah konversi OCR!</em></p>
+                </div>
+            </div>
+        </div>
+
+
+         <!-- ===== SECTION 1: AKSES ILovePDF ===== -->
+        <div id="section-1" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">2</div>
-                <div class="slide-title">Masuk ke Fitur PDF to Excel</div>
+                <div class="slide-title">Akses Website iLovePDF</div>
             </div>
             <div class="slide-content">
                 <ol>
-                    <li>Setelah halaman utama iLovePDF terbuka, scroll hingga bagian menu tools</li>
-                    <li>Cari kotak warna hijau dengan ikon Excel</li>
-                    <li>Klik tombol "PDF to Excel" di bagian kanan bawah grid tools</li>
-                    <li>Pastikan tool yang dipilih adalah PDF to Excel, bukan PDF to Word/JPG</li>
+                    <li>Buka browser (Chrome, Edge, Firefox, atau Safari)</li>
+                    <li>Masuk ke website: <a href="https://www.ilovepdf.com" target="_blank" style="color: #01267F; font-weight: bold;">ilovepdf.com</a></li>
+                    <li>Alternatif: Search "iLovePDF" di Google dan pilih hasil pertama</li>
+                    <li>Pastikan koneksi internet stabil untuk proses upload dan download</li>
                 </ol>
-                    <div class="image-container">
-                    <img src="Picture2.png" alt="Masuk ke fitur konversi PDF ke Excel">
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture1.png" alt="Tampilan website iLovePDF">
+                    <div class="image-caption">Gambar 1: Halaman utama iLovePDF dengan berbagai tools konversi</div>
                 </div>
             </div>
         </div>
-        
-        <!-- Slide 3 -->
-        <div class="slide-container">
+
+ 
+        <!-- ===== SECTION 2: PILIH TOOL KONVERSI ===== -->
+        <div id="section-2" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">3</div>
+                <div class="slide-title">Pilih Tool PDF to Excel</div>
+            </div>
+            <div class="slide-content">
+                <ol>
+                    <li>Scroll ke bagian "Convert PDF" di halaman utama</li>
+                    <li>Cari tool "PDF to Excel" (ikon hijau dengan logo Excel)</li>
+                    <li>Klik tool tersebut untuk masuk ke halaman konversi</li>
+                    <li>Pastikan tool yang dipilih benar: "PDF to Excel" bukan "PDF to Word"</li>
+                </ol>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture2.png" alt="Pilihan tool PDF to Excel">
+                    <div class="image-caption">Gambar 2: Tool PDF to Excel di antara berbagai opsi konversi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 3: UPLOAD FILE ===== -->
+        <div id="section-3" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">4</div>
                 <div class="slide-title">Upload File PDF</div>
             </div>
             <div class="slide-content">
                 <ol>
-                    <li>Pada halaman Convert PDF to EXCEL, klik tombol merah "Select PDF file"</li>
-                    <li>Alternatif: tarik file PDF ke area abu-abu bertuliskan "or drop PDF here"</li>
-                    <li>Tunggu sampai jendela pemilihan file muncul</li>
-                    <li>Pilih file PDF yang ingin dikonversi</li>
+                    <li>Klik tombol "Select PDF file" (tombol merah besar)</li>
+                    <li>Pilih file PDF dari komputer Anda</li>
+                    <li>Alternatif: Drag & drop file ke area upload</li>
+                    <li>Tunggu proses upload selesai (tergantung ukuran file)</li>
                 </ol>
-                    <div class="image-container">
-                    <img src="Picture3.png" alt="Memasukkan file PDF yang ingin dikonversi">
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture3.png" alt="Proses upload file PDF">
+                    <div class="image-caption">Gambar 3: Interface upload file dengan drag & drop option</div>
                 </div>
-                <div class="tips-box">
-                    <h4>💡 Tips:</h4>
-                    <p>Pastikan file PDF tidak terproteksi password dan berisi data tabel yang jelas</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Slide 4 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">4</div>
-                <div class="slide-title">Konfigurasi Layout Hasil</div>
-            </div>
-            <div class="slide-content">
-                <h4>Pengaturan Layout:</h4>
-                <ul>
-                    <li><strong>Multiple sheets</strong> → jika PDF memiliki beberapa tabel/halaman yang berbeda</li>
-                    <li><strong>One sheet</strong> → jika hanya 1 tabel besar</li>
-                    <li>Untuk dataset long / multi-tabel per halaman, pilih Multiple sheets</li>
-                </ul>
-                    <div class="image-container">
-                    <img src="Picture5.png" alt="Mengatur layout hasil konversi sebelum diproses">
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ Batasan File:</h4>
+                    <p>• Maksimal 15MB (versi gratis)<br>
+                    • Format .pdf (bukan .jpg/.png yang di-rename)<br>
+                    • Tidak terproteksi password<br>
+                    • Tidak encrypted/terkunci edit</p>
                 </div>
             </div>
         </div>
-        
-        <!-- Slide 5 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 4: ATUR LAYOUT ===== -->
+        <div id="section-4" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">5</div>
+                <div class="slide-title">Konfigurasi Layout Output</div>
+            </div>
+            <div class="slide-content">
+                <h4>⚙️ Pilihan Layout Hasil Konversi:</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; border: 2px solid #4CAF50;">
+                        <h4 style="color: #2E7D32;">📑 One Sheet</h4>
+                        <p><strong>Untuk:</strong> Satu tabel besar, data sederhana</p>
+                        <p><strong>Contoh:</strong> Laporan bulanan, single dataset</p>
+                    </div>
+                    
+                    <div style="background: #fff8e1; padding: 15px; border-radius: 8px; border: 2px solid #FF9800;">
+                        <h4 style="color: #EF6C00;">📚 Multiple Sheets</h4>
+                        <p><strong>Untuk:</strong> Beberapa tabel, multi-halaman</p>
+                        <p><strong>Contoh:</strong> Laporan tahunan, data per bagian</p>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture5.png" alt="Pengaturan layout output">
+                    <div class="image-caption">Gambar 4: Opsi layout One Sheet vs Multiple Sheets</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 5: PROSES & DOWNLOAD ===== -->
+        <div id="section-5" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">6</div>
                 <div class="slide-title">Proses Konversi & Download</div>
             </div>
             <div class="slide-content">
                 <ol>
-                    <li>Klik tombol merah "Convert to EXCEL" untuk mulai proses konversi</li>
-                    <li>Tunggu hingga proses selesai (biasanya &lt;30 detik)</li>
-                    <li>Jangan tutup browser selama proses berlangsung</li>
-                    <li>Klik tombol merah "Download EXCEL" setelah proses selesai</li>
-                    <li>Simpan file ke folder tujuan</li>
+                    <li>Setelah pengaturan, klik "Convert to EXCEL" (tombol merah)</li>
+                    <li>Tunggu proses selesai (biasanya 10-60 detik)</li>
+                    <li>Jangan tutup browser/tab selama proses</li>
+                    <li>Setelah selesai, klik "Download EXCEL"</li>
+                    <li>Simpan file dengan nama yang jelas</li>
                 </ol>
-                    <div class="image-container">
-                    <img src="Picture6.png" alt="Mengunduh file Excel hasil konversi">
-                </div>
-            </div>
-        </div>
-          
-        <!-- Slide 6 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">6</div>
-                <div class="slide-title">Mengecek struktur tabel di dalam Excel</div>
-            </div>
-            <div class="slide-content">
-                <ol>
-                    <li>Buka file Excel hasil konversi.</li>
-                    <li>Periksa apakah header tabel (Kolom A–D) sudah sesuai dengan tabel di PDF</li>
-                    <li>Perhatikan jika terdapat tanda “*” atau titik (.) sebagai missing value</li>
-                    <li>Catat adanya multi-header (judul baris 1 dan baris 2) untuk proses cleaning selanjutnya</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture8.png" alt="Mengecek struktur tabel di dalam Excel">
-                </div>
-            </div>
-        </div>
                 
-        <!-- Slide 7 -->
-        <div class="slide-container">
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture6.png" alt="Proses download hasil konversi">
+                    <div class="image-caption">Gambar 5: Interface download file Excel hasil konversi</div>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>✅ Checklist Setelah Download:</h4>
+                    <ol>
+                        <li>Cek ukuran file (tidak 0KB)</li>
+                        <li>Buka file di Excel (tidak corrupt)</li>
+                        <li>Verifikasi format .xlsx (bukan .pdf)</li>
+                        <li>Backup file original PDF</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 6: VALIDASI STRUKTUR ===== -->
+        <div id="section-6" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">7</div>
-                <div class="slide-title">Bandingkan Hasil konversi Excel dengan tabel asli</div>
+                <div class="slide-title">Validasi Struktur Tabel</div>
             </div>
             <div class="slide-content">
+                <h4>🔍 Langkah Validasi Awal:</h4>
                 <ol>
-                    <li>Buka kembali PDF sumber</li>
-                    <li>Cocokkan judul tabel, nama kolom, dan urutan variabel</li>
-                    <li>Pastikan angka dan kode industri sesuai</li>
-                    <li>Identifikasi simbol khusus seperti * atau bold (ini biasanya footnote atau missing)</li>
+                    <li>Buka file Excel hasil konversi</li>
+                    <li>Periksa apakah header kolom sudah sesuai</li>
+                    <li>Cek format data (text, number, date)</li>
+                    <li>Identifikasi cell yang merge/unmerge</li>
+                    <li>Catat anomali format (bold, italic, color)</li>
                 </ol>
-                    <div class="image-container">
-                    <img src="Picture9.png" alt="Membandingkan hasil konversi Excel dengan tabel asli">
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture8.png" alt="Validasi struktur tabel di Excel">
+                    <div class="image-caption">Gambar 6: Contoh struktur tabel hasil konversi</div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>⚠️ Common Issues & Solusi:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Masalah</th>
+                            <th>Solusi</th>
+                            <th>Excel Feature</th>
+                        </tr>
+                        <tr>
+                            <td>Header terpecah</td>
+                            <td>Merge cell manual</td>
+                            <td>Merge & Center</td>
+                        </tr>
+                        <tr>
+                            <td>Number jadi text</td>
+                            <td>Convert to number</td>
+                            <td>VALUE() function</td>
+                        </tr>
+                        <tr>
+                            <td>Extra columns</td>
+                            <td>Delete empty columns</td>
+                            <td>Delete Columns</td>
+                        </tr>
+                        <tr>
+                            <td>Missing borders</td>
+                            <td>Add borders manual</td>
+                            <td>Border Tool</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-        
-        <!-- Slide 8 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 7: PERBANDINGAN DATA ===== -->
+        <div id="section-7" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">8</div>
-                <div class="slide-title">Struktur dataset standar sebelum input</div>
+                <div class="slide-title">Perbandingan Data Asli vs Hasil</div>
             </div>
             <div class="slide-content">
+                <h4>🔍 Validasi Akurasi Konversi:</h4>
                 <ol>
-                    <li>Buka file Excel baru</li>
-                    <li>Buat header dataset dalam format data: Kode Industri,Tanah, GedungMesin dan Perlengkapan, KendaraanPerangkat Lunak / Database, Modal Tetap Lainnya, Total</li>
-                    <li>Tambahkan merge cell / merge column di template ini</li>
+                    <li><strong>Buka PDF asli</strong> dan file Excel hasil konversi secara berdampingan</li>
+                    <li><strong>Cocokkan header kolom:</strong> Pastikan nama kolom sesuai</li>
+                    <li><strong>Sampling data:</strong> Pilih 5-10 baris acak, cocokkan nilai</li>
+                    <li><strong>Cek total kolom:</strong> Hitung total untuk kolom numerik</li>
+                    <li><strong>Identifikasi simbol khusus:</strong> *, -, N/A, blank cells</li>
                 </ol>
-                    <div class="image-container">
-                    <img src="Picture10.png" alt="Membentuk struktur dataset standar sebelum input">
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture9.png" alt="Perbandingan data asli vs hasil konversi">
+                    <div class="image-caption">Gambar 7: Contoh perbandingan antara PDF asli dan Excel hasil</div>
                 </div>
             </div>
         </div>
-         
-        <!-- Slide 9 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 8: TEMPLATE STANDAR ===== -->
+        <div id="section-8" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">9</div>
-                <div class="slide-title">Struktur tabel yang di-convert sesuai format asli</div>
+                <div class="slide-title">Membuat Template Standar</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Periksa setiap kolom apakah sudah sesuai nama variabel: Tanah, Gedung, Mesin dan Perlengkapan, Kendaraan, Perangkat Lunak/Database, Modal Tetap Lainnya, Total</li>
-                    <li>Pastikan tidak ada kolom yang hilang akibat proses konversi</li>
-                    <li>Cek apakah format angka masih ada pemisah ribuan (titik), jika ya → tidak perlu dihapus dulu</li>
-                    <li>Pastikan baris kosong atau tanda “-” menandakan missing value, bukan 0</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture11.png" alt="Memastikan struktur tabel yang di-convert sesuai format asli">
+                <h4>📋 Struktur Database yang Baik:</h4>
+                
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #01267F; margin-bottom: 15px;">🎯 Prinsip Database Tidy:</h4>
+                    <ol>
+                        <li><strong>Setiap variabel satu kolom</strong> (tanpa merge cell)</li>
+                        <li><strong>Setiap observasi satu baris</strong></li>
+                        <li><strong>Setiap nilai satu cell</strong> (tidak ada multiple values)</li>
+                        <li><strong>Metadata di kolom terpisah</strong></li>
+                    </ol>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture10.png" alt="Template database standar">
+                    <div class="image-caption">Gambar 8: Contoh struktur database tidy dengan metadata</div>
                 </div>
             </div>
         </div>
-               
-        <!-- Slide 10 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 9: QUALITY CHECK ===== -->
+        <div id="section-9" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">10</div>
-                <div class="slide-title">Identifikasi data abnormal/missing yang tidak rapi</div>
+                <div class="slide-title">Quality Check Data</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Scroll ke tengah tabel dan cari blok data yang tidak beraturan</li>
-                    <li>Perhatikan nilai yang ditandai * pada kolom tertentu → ini menunjukkan data tidak tersedia di publikasi</li>
-                    <li>Catat kode industri yang memiliki baris kosong berturut-turut</li>
-                    <li>Tandai range data tersebut untuk proses pembersihan manual atau imputasi nanti</li>
-                    <li>Dan karena tidak banyak, perbaiki secara manual dengan masukan 2 baris lalu isi sesuai file asli (.pdf)</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture12.png" alt="Mengidentifikasi data abnormal/missing yang tidak rapi">
+                <h4>✅ Checklist Quality Assurance:</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #c62828;">📏 Format</h4>
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>Number vs Text</li>
+                            <li>Date format</li>
+                            <li>Decimal separator</li>
+                            <li>Currency symbols</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #fff8e1; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #ff8f00;">🔍 Konsistensi</h4>
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>Nama kolom</li>
+                            <li>Satuan ukuran</li>
+                            <li>Kode referensi</li>
+                            <li>Case sensitivity</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #2e7d32;">✅ Kelengkapan</h4>
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>Missing values</li>
+                            <li>Duplicate rows</li>
+                            <li>Required fields</li>
+                            <li>Data range</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-               
-        <!-- Slide 11 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 10: DATA CLEANING ===== -->
+        <div id="section-10" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">11</div>
-                <div class="slide-title">Tambah Kolom Metadata</div>
+                <div class="slide-title">Pembersihan Data (Data Cleaning)</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Tambahkan kolom “Keterangan” di sebelah kanan kolom Kode Industri</li>
-                    <li>Isi dengan nilai IB atau IBS sesuai kategori pada tabel PDF</li>
-                    <li>Data ini penting untuk filter pemrosesan statistik berdasarkan ukuran industri</li>
-                    <li>Pastikan tidak ada sel kosong di kolom metadata</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture13.png" alt="Menambah Kolom Metadata">
+                <h4>🧹 Langkah-langkah Data Cleaning:</h4>
+                
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <h4 style="color: #01267F;">📋 Checklist Cleaning:</h4>
+                    <ol>
+                        <li><strong>Hapus duplikat</strong> → Remove Duplicates</li>
+                        <li><strong>Standarkan format</strong> → Text to Columns</li>
+                        <li><strong>Handle missing values</strong> → Fill atau flag</li>
+                        <li><strong>Koreksi typo</strong> → Find and Replace</li>
+                        <li><strong>Validasi range</strong> → Data Validation</li>
+                    </ol>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture12.png" alt="Data cleaning process">
+                    <div class="image-caption">Gambar 9: Contoh data sebelum dan setelah cleaning</div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>⚡ Excel Cleaning Techniques:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Masalah</th>
+                            <th>Formula/Fitur</th>
+                            <th>Lokasi</th>
+                        </tr>
+                        <tr>
+                            <td>Hapus duplikat</td>
+                            <td>Remove Duplicates</td>
+                            <td>Data Tab</td>
+                        </tr>
+                        <tr>
+                            <td>Text to number</td>
+                            <td>VALUE() atau *1</td>
+                            <td>Formulas</td>
+                        </tr>
+                        <tr>
+                            <td>Trim spaces</td>
+                            <td>TRIM()</td>
+                            <td>Formulas</td>
+                        </tr>
+                        <tr>
+                            <td>Find & replace</td>
+                            <td>Ctrl+H</td>
+                            <td>Home Tab</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-                     
-        <!-- Slide 12 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 10B: FIX FORMAT DENGAN SUBSTITUTE ===== -->
+        <div id="section-10b" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">11B</div>
+                <div class="slide-title">Fix Format dengan Formula SUBSTITUTE</div>
+            </div>
+            <div class="slide-content">
+                <h4>🔧 Masalah Format yang Sering Terjadi:</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #c62828;">❌ Masalah 1</h4>
+                        <p><strong>Sebelum:</strong> xx.xxx<br>
+                        <strong>Hasil:</strong> xx (spasi) xxx<br>
+                        <strong>Issue:</strong> Titik jadi spasi</p>
+                    </div>
+                    
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #ff8f00;">❌ Masalah 2</h4>
+                        <p><strong>Sebelum:</strong> xx.xxx (banyak spasi)    xx.xxx<br>
+                        <strong>Hasil:</strong> xx xxx xx  (banyak spasi)  xxx<br>
+                        <strong>Issue:</strong> Multi-value dalam satu cell</p>
+                    </div>
+                    
+                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #2e7d32;">✅ Setelah Perbaikan</h4>
+                        <p><strong>Hasil:</strong> xxxxx<br>
+                        <strong>Hasil:</strong> xxxxx    xxxxx<br>
+                        <strong>Status:</strong> Clean numbers</p>
+                    </div>
+                </div>
+                
+                <h4>⚙️ Formula SUBSTITUTE Ganda:</h4>
+                
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📝 Formula Utama:</h4>
+                    <div style="background: white; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 1.1em;">
+                        =SUBSTITUTE(SUBSTITUTE(<strong>A1</strong>, "   ", "<>"), " ", "")
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <h5>Penjelasan Formula:</h5>
+                        <ol>
+                            <li><strong>SUBSTITUTE pertama:</strong> Ganti 3 spasi "&nbsp;&nbsp;&nbsp;" dengan "<>"</li>
+                            <li><strong>SUBSTITUTE kedua:</strong> Hapus semua spasi tunggal</li>
+                            <li><strong>Hasil:</strong> "xxxxx<>xxxxx" → bisa dipisah dengan Text to Columns</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture29.png" alt="Formula SUBSTITUTE di Excel">
+                    <div class="image-caption">Gambar 10B: Contoh penerapan formula SUBSTITUTE ganda</div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🎯 Variasi Formula untuk Kasus Berbeda:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Masalah</th>
+                            <th>Formula</th>
+                            <th>Hasil</th>
+                        </tr>
+                        <tr>
+                            <td>Titik jadi spasi</td>
+                            <td><code>=SUBSTITUTE(A1, " ", "")</code></td>
+                            <td>50000</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-value satu cell</td>
+                            <td><code>=SUBSTITUTE(SUBSTITUTE(A1, "   ", "|"), " ", "")</code></td>
+                            <td>20000|30000</td>
+                        </tr>
+                        <tr>
+                            <td>Koma decimal jadi titik</td>
+                            <td><code>=SUBSTITUTE(A1, ",", ".")</code></td>
+                            <td>50.5</td>
+                        </tr>
+                        <tr>
+                            <td>Hapus karakter khusus</td>
+                            <td><code>=SUBSTITUTE(SUBSTITUTE(A1, "*", ""), "#", "")</code></td>
+                            <td>Clean text</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📋 Step-by-Step Cleaning dengan SUBSTITUTE:</h4>
+                    <ol>
+                        <li><strong>Buat kolom helper</strong> di sebelah data asli</li>
+                        <li><strong>Masukkan formula:</strong> <code>=SUBSTITUTE(SUBSTITUTE(B2, "   ", "<>"), " ", "")</code></li>
+                        <li><strong>Copy formula</strong> ke seluruh kolom</li>
+                        <li><strong>Convert to values:</strong> Copy → Paste Special → Values</li>
+                        <li><strong>Text to Columns:</strong> Data → Text to Columns → Delimited → pilih "<>"</li>
+                        <li><strong>Delete kolom helper</strong> setelah data clean</li>
+                    </ol>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>✅ Keuntungan Formula SUBSTITUTE:</h4>
+                    <p>• <strong>Tidak merusak data asli</strong> (gunakan kolom helper)<br>
+                    • <strong>Reversible</strong> bisa undo dengan menghapus kolom<br>
+                    • <strong>Consistent</strong> berlaku untuk seluruh dataset<br>
+                    • <strong>Customizable</strong> bisa dikombinasi dengan formula lain<br>
+                    • <strong>Audit trail</strong> mudah track perubahan</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 11: TAMBAH METADATA ===== -->
+        <div id="section-11" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">12</div>
-                <div class="slide-title">Struktur Sheet Kompilasi</div>
+                <div class="slide-title">Penambahan Metadata</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Gunakan nama sheet standard: COMPILE_PENAMBAHAN untuk data penambahan/pembelian</li>
-                    <li>Hindari mencampur data jenis lain (misal pengurangan, depresiasi) dalam sheet ini</li>
-                    <li>Buat sheet terpisah seperti COMPILE_PENGURANGAN jika dataset lain tersedia</li>
-                    <li>Simpan tabel awal setelah input sekitar 10–20 baris sebagai checkpoint</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture14.png" alt="Struktur Sheet Kompilasi">
+                <h4>🏷️ Mengapa Metadata Penting:</h4>
+                <p>Metadata membantu dalam:</p>
+                <ul>
+                    <li><strong>Filtering data</strong> berdasarkan kategori</li>
+                    <li><strong>Tracking sumber</strong> dan versi data</li>
+                    <li><strong>Analisis segmentasi</strong> (per tahun, jenis, kategori)</li>
+                    <li><strong>Data governance</strong> dan dokumentasi</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture13.png" alt="Penambahan kolom metadata">
+                    <div class="image-caption">Gambar 10: Contoh kolom metadata di sebelah data utama</div>
+                </div>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📝 Kolom Metadata yang Direkomendasikan:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <strong>Data Source</strong><br>
+                            • Source_ID<br>
+                            • Source_Name<br>
+                            • Extraction_Date
+                        </div>
+                        <div>
+                            <strong>Time Metadata</strong><br>
+                            • Year<br>
+                            • Quarter<br>
+                            • Period
+                        </div>
+                        <div>
+                            <strong>Category</strong><br>
+                            • Data_Type<br>
+                            • Category<br>
+                            • Subcategory
+                        </div>
+                        <div>
+                            <strong>Quality</strong><br>
+                            • Data_Status<br>
+                            • Validation_Date<br>
+                            • Version
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-                       
-        <!-- Slide 13 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 12: STRUKTUR DATABASE ===== -->
+        <div id="section-12" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">13</div>
-                <div class="slide-title">Simpan Workbook agar struktur tidak hilang</div>
+                <div class="slide-title">Struktur Database Final</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Klik menu File di kiri atas Excel</li>
-                    <li>Pilih Save As untuk menyimpan file baru</li>
-                    <li>Jangan gunakan Save, karena file masih kosong atau auto-generated</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture15.png" alt="Menyimpan workbook agar struktur tidak hilang">
+                <h4>🗃️ Best Practices Database Structure:</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #7b1fa2;">✅ DO (Lakukan)</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Gunakan satu sheet per dataset type</li>
+                            <li>Simpan metadata di kolom terpisah</li>
+                            <li>Gunakan nama sheet yang deskriptif</li>
+                            <li>Buat tabel Excel (Ctrl+T)</li>
+                            <li>Simpan template kosong</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #c62828;">❌ DON'T (Jangan Lakukan)</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Jangan merge cell di data utama</li>
+                            <li>Jangan campur data type dalam satu sheet</li>
+                            <li>Jangan gunakan spasi di nama sheet</li>
+                            <li>Jangan simpan formula di database final</li>
+                            <li>Jangan lupa backup versi sebelumnya</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-                       
-        <!-- Slide 14 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 13: FORMAT DATA LONG ===== -->
+        <div id="section-13" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">14</div>
-                <div class="slide-title">Penentuan Folder tujuan yang konsisten</div>
+                <div class="slide-title">Format Data Long untuk Analisis</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Klik Browse agar bisa memilih direktori manual</li>
-                    <li>Hindari penyimpanan di lokasi acak seperti Desktop</li>
-                    <li>Gunakan folder proyek/data master yang konsisten agar mudah diakses</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture17.png" alt="Menentukan folder tujuan yang konsisten">
+                <h4>📐 Format Data Long vs Wide:</h4>
+                
+                <div style="background: #fff8e1; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                        <div>
+                            <h4 style="color: #ff8f00;">📊 Wide Format (Tabel)</h4>
+                            <p><strong>Struktur:</strong><br>
+                            ID | Var1 | Var2 | Var3<br>
+                            1 | 10 | 20 | 30<br>
+                            2 | 15 | 25 | 35</p>
+                            <p><strong>Untuk:</strong> Laporan, presentasi</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #2e7d32;">📈 Long Format (Database)</h4>
+                            <p><strong>Struktur:</strong><br>
+                            ID | Variable | Value<br>
+                            1 | Var1 | 10<br>
+                            1 | Var2 | 20<br>
+                            1 | Var3 | 30<br>
+                            2 | Var1 | 15<br>
+                            2 | Var2 | 25</p>
+                            <p><strong>Untuk:</strong> Analisis, statistik, ML</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture21.png" alt="Format data long">
+                    <div class="image-caption">Gambar 11: Contoh database dalam format long</div>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>🎯 Keuntungan Format Long:</h4>
+                    <p>• <strong>Mudah untuk analysis</strong> (pivot, filter, aggregate)<br>
+                    • <strong>Scalable</strong> untuk banyak variabel<br>
+                    • <strong>Consistent</strong> untuk machine learning<br>
+                    • <strong>Flexible</strong> untuk berbagai analisis<br>
+                    • <strong>Efficient</strong> untuk storage</p>
                 </div>
             </div>
         </div>
-                       
-        <!-- Slide 15 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 14: MULTI-SUMBER DATA ===== -->
+        <div id="section-14" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">15</div>
-                <div class="slide-title">Penamaan file</div>
+                <div class="slide-title">Kompilasi Data Multi-Sumber</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Gunakan format nama file: [Tahun]_[Sumber]_[Topik]_[Kategori].xlsxContoh:2018_BPS_Statistik Industri Manufaktur Industri_IB.xlsx</li>
-                    <li>Pastikan tidak menggunakan spasi di awal/akhir atau karakter ilegal seperti / * |.</li>
-                    <li>Klik Save</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture18.png" alt="Penamaan file sesuai standar data Bappenas/PHKEI">
+                <h4>🔗 Menggabungkan Data dari Berbagai Sumber/Tahun:</h4>
+                
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📊 Prinsip Kompilasi Data:</h4>
+                    <ol>
+                        <li><strong>Standardize format</strong> semua file sebelum digabung</li>
+                        <li><strong>Validasi struktur</strong> kolom harus identik</li>
+                        <li><strong>Tambahkan identifier</strong> sumber/tahun di metadata</li>
+                        <li><strong>Check consistency</strong> nilai dan satuan</li>
+                        <li><strong>Preserve source info</strong> untuk traceability</li>
+                    </ol>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture19.png" alt="Kompilasi data multi-tahun">
+                    <div class="image-caption">Gambar 12: Contoh data dari berbagai tahun siap dikompilasi</div>
                 </div>
             </div>
         </div>
-                         
-        <!-- Slide 16 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 15: TEMPLATE DATABASE FINAL ===== -->
+        <div id="section-15" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">16</div>
-                <div class="slide-title">Data tahun yang lain</div>
+                <div class="slide-title">Template Database Final Format Long</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Lakukan hal yang sama terhadap data tahun-tahun yang lain</li>
-                    <li>Kumpulkan dalam 1 folder</li>
-                    <li>File siap di compile</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture19.png" alt="Data tahun yang lain">
+                <h4>🏗️ Struktur Template Database Long:</h4>
+                
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📋 Kolom Wajib Database Long:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Kolom</th>
+                            <th>Tipe Data</th>
+                            <th>Keterangan</th>
+                            <th>Contoh</th>
+                        </tr>
+                        <tr>
+                            <td>ID</td>
+                            <td>Text/Number</td>
+                            <td>Identifier unik</td>
+                            <td>IND001, 1001</td>
+                        </tr>
+                        <tr>
+                            <td>Variable</td>
+                            <td>Text</td>
+                            <td>Nama variabel</td>
+                            <td>Revenue, Production</td>
+                        </tr>
+                        <tr>
+                            <td>Value</td>
+                            <td>Number</td>
+                            <td>Nilai data</td>
+                            <td>1000, 25.5</td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>Number</td>
+                            <td>Tahun data</td>
+                            <td>2024, 2023</td>
+                        </tr>
+                        <tr>
+                            <td>Unit</td>
+                            <td>Text</td>
+                            <td>Satuan pengukuran</td>
+                            <td>IDR, Ton, Unit</td>
+                        </tr>
+                        <tr>
+                            <td>Source</td>
+                            <td>Text</td>
+                            <td>Sumber data</td>
+                            <td>BPS, Company Report</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture24.png" alt="Template database long">
+                    <div class="image-caption">Gambar 13: Template database dalam format long yang siap pakai</div>
                 </div>
             </div>
         </div>
-                         
-        <!-- Slide 17 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 16: INTEGRASI DATA ===== -->
+        <div id="section-16" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">17</div>
-                <div class="slide-title">Menyalin Data dari Workbook Sumber</div>
+                <div class="slide-title">Integrasi Data ke Database Long</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Buka salah satu workbook tahun (contoh: 2022)</li>
-                    <li>Pilih data dari baris pertama hingga baris terakhir tabel (jangan pilih kolom kosong)</li>
-                    <li>Pastikan seluruh kolom: Kode Industri s.d Total termasuk dalam area seleksi</li>
-                    <li>Tekan Ctrl + C untuk menyalin</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture20.png" alt="Menyalin Data dari Workbook Sumber">
+                <h4>🔄 Proses Integrasi Data ke Format Long:</h4>
+                
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #01267F;">📋 Step-by-Step Integration:</h4>
+                    <ol>
+                        <li><strong>Buka template database long</strong> yang kosong</li>
+                        <li><strong>Ubah data wide ke long:</strong> Gunakan Power Query atau Unpivot</li>
+                        <li><strong>Copy data cleaned</strong> ke template</li>
+                        <li><strong>Isi kolom metadata</strong> (Year, Source, Unit)</li>
+                        <li><strong>Validasi struktur</strong> setelah integrasi</li>
+                        <li><strong>Ulangi untuk semua tahun/sumber</strong></li>
+                        <li><strong>Simpan sebagai MASTER database</strong></li>
+                    </ol>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture22.png" alt="Proses integrasi data">
+                    <div class="image-caption">Gambar 14: Contoh proses integrasi data ke format long</div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>⚡ Cara Unpivot Data (Wide to Long):</h4>
+                    <ol>
+                        <li>Pilih seluruh data di Excel</li>
+                        <li>Klik Data → From Table/Range</li>
+                        <li>Di Power Query, pilih kolom ID</li>
+                        <li>Klik Transform → Unpivot Columns</li>
+                        <li>Rename kolom: Attribute → Variable, Value → Value</li>
+                        <li>Close & Load ke worksheet baru</li>
+                    </ol>
                 </div>
             </div>
         </div>
-                         
-        <!-- Slide 18 -->
-        <div class="slide-container">
+
+        <!-- ===== SECTION 17: PENYIMPANAN & NAMING ===== -->
+        <div id="section-17" class="slide-container">
             <div class="slide-header">
                 <div class="slide-number">18</div>
-                <div class="slide-title">Template Database Final</div>
+                <div class="slide-title">Penyimpanan & Penamaan File</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Buat workbook baru dengan struktur kolom berikut:Kode Industri, Tipe Industri, Tanah, GedungMesin dan Perlengkapan, Kendaraan, Perangkat Lunak/Database, Modal Tetap Lainnya, Total, Tahun, Jenis, Digit</li>
-                    <li>Jangan gunakan merge cell</li>
-                    <li>Kolom metadata harus berada di kanan blok variabel utama</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture21.png" alt="Template Database Final">
+                <h4>📁 Best Practices Naming Convention:</h4>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">🎯 Format Penamaan yang Direkomendasikan:</h4>
+                    <p><code>[YYYY-MM-DD]_[SOURCE]_[DATATYPE]_[VERSION].[EXT]</code></p>
+                    
+                    <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 6px;">
+                        <strong>Contoh:</strong><br>
+                        • <code>2024-03-20_BPS_ECONOMIC_LONG_v01.xlsx</code><br>
+                        • <code>2020-2023_MULTIYEAR_MASTER_v02.xlsx</code><br>
+                        • <code>2019_CENSUS_DEMOGRAPHIC_CLEAN.xlsx</code>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="C:\Users\mikha\Mikel\Web\pdf-to-excel_gambar\Picture27.png" alt="Penamaan file database">
+                    <div class="image-caption">Gambar 15: Contoh penamaan file database final</div>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>🎉 Database Siap Digunakan!</h4>
+                    <p>Database Anda sekarang dalam format long, terstruktur dengan baik, memiliki metadata lengkap, dan siap untuk:</p>
+                    <p>• <strong>Analisis statistik</strong> (regresi, trend analysis)<br>
+                    • <strong>Visualisasi data</strong> (charts, dashboards)<br>
+                    • <strong>Machine learning</strong> (prediction models)<br>
+                    • <strong>Reporting</strong> (laporan periodik)<br>
+                    • <strong>Sharing dengan tim</strong> (collaboration)</p>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>📋 Final Checklist:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Item</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                        </tr>
+                        <tr>
+                            <td>Data dalam format long</td>
+                            <td>✅</td>
+                            <td>ID, Variable, Value</td>
+                        </tr>
+                        <tr>
+                            <td>Metadata lengkap</td>
+                            <td>✅</td>
+                            <td>Year, Source, Unit</td>
+                        </tr>
+                        <tr>
+                            <td>Data cleaned</td>
+                            <td>✅</td>
+                            <td>No duplicates, consistent</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-tahun terkompilasi</td>
+                            <td>✅</td>
+                            <td>All years in one file</td>
+                        </tr>
+                        <tr>
+                            <td>Naming convention baik</td>
+                            <td>✅</td>
+                            <td>Standard format</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-                         
-        <!-- Slide 19 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">19</div>
-                <div class="slide-title">Paste ke Template</div>
+
+        <!-- ===== CONCLUSION ===== -->
+        <div class="slide-container" style="background: linear-gradient(135deg, #01267F 0%, #2c5282 100%); color: white;">
+            <div class="slide-header" style="border-bottom-color: rgba(255,255,255,0.3);">
+                <div class="slide-number" style="background: white; color: #01267F;">✓</div>
+                <div class="slide-title" style="color: white;">🎯 Ringkasan Proses Lengkap</div>
             </div>
             <div class="slide-content">
-                <ol>
-                    <li>Klik sel A2 pada sheet database</li>
-                    <li>Paste data menggunakan:Paste Special → Values (tanpa format)</li>
-                    <li>Pastikan baris header tidak ikut ter-copy</li>
-                    <li>Verifikasi apakah data masuk sesuai kolom</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture22.png" alt="Paste ke Template">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <h4>📥 INPUT</h4>
+                        <p>• File PDF (scan/text)<br>
+                        • Data multi-tahun<br>
+                        • Berbagai sumber data</p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <h4>⚙️ PROCESS</h4>
+                        <p>• Konversi PDF→Excel<br>
+                        • Data cleaning<br>
+                        • Validasi & QA<br>
+                        • Tambah metadata</p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <h4>📤 OUTPUT</h4>
+                        <p>• Database format long<br>
+                        • Metadata lengkap<br>
+                        • File terorganisir<br>
+                        • Dokumentasi</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                    <h3>✅ Database Anda Sekarang:</h3>
+                    <div style="display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 15px;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">📊 Analysis-Ready</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">🔍 Traceable</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">🔄 Scalable</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">🎯 Consistent</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">📈 Future-Proof</span>
+                    </div>
                 </div>
             </div>
         </div>
-                         
-        <!-- Slide 20 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">20</div>
-                <div class="slide-title">Penambahan Metadata Tahun & Jenis</div>
-            </div>
-            <div class="slide-content">
-                <ol>
-                    <li>Pada kolom Tahun, isi nilai sesuai dokumen (contoh: 2022)</li>
-                    <li>Pada kolom Jenis, isi sesuai tabel: Pembelian/Penambahan dan Pembuatan/Perbaikan Besar</li>
-                    <li>Jangan mempersingkat deskripsi karena konsistensi penting untuk model data</li>
-                    <li>Pada kolom Digit, gunakan formula: =LEN(A2)</li>
-                    <li>Drag ke bawah hingga seluruh baris terisi</li>
-                    <li>Digit akan menjadi metadata untuk filtrasi analisis sektoral: 2-digit = sector, 3-digit = subsector, 4-digit = industri detail</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture23.png" alt="Penambahan Metadata Tahun & Jenis">
-                </div>
-            </div>
-        </div>
-                         
-        <!-- Slide 21 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">21</div>
-                <div class="slide-title">Kompilasi Multi-Tahun dalam 1 Sheet</div>
-            </div>
-            <div class="slide-content">
-                <ol>
-                    <li>Salin data tahun berikutnya (2021,2020, 2019, dst)</li>
-                    <li>Paste tepat di bawah baris terakhir data sebelumnya</li>
-                    <li>Pastikan kolom metadata terisi konsisten pada tiap baris</li>
-                    <li>Sheet diberi nama:2018–2022</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture24.png" alt="Kompilasi Multi-Tahun dalam 1 Sheet">
-                </div>
-            </div>
-        </div>
-                         
-        <!-- Slide 22 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">22</div>
-                <div class="slide-title">Menyimpan database multi-tahun pertama</div>
-            </div>
-            <div class="slide-content">
-                <ol>
-                    <li>Klik menu File → Save As</li>
-                    <li>Pilih lokasi penyimpanan database jangka panjang (bukan folder sumber tahunan)</li>
-                    <li>Pilih Browse</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture25.png" alt="Menyimpan database multi-tahun pertama">
-                </div>
-            </div>
-        </div>
-                         
-        <!-- Slide 23 -->
-        <div class="slide-container">
-            <div class="slide-header">
-                <div class="slide-number">23</div>
-                <div class="slide-title">Penamaan database gabungan</div>
-            </div>
-            <div class="slide-content">
-                <ol>
-                    <li>Gunakan format: [RentangTahun]_[Sumber]_[Topik]_[Kategori]_db_v01.xlsx, Contoh:2018-2022_BPS_Statistik Industri Manufaktur Industri_db_v01.xlsx</li>
-                    <li>Huruf kecil/huruf besar tidak penting, yang penting konsistensi</li>
-                    <li>Klik Save</li>
-                    <li>Konversi dari file pdf menjadi excel selesai</li>
-                </ol>
-                    <div class="image-container">
-                    <img src="Picture27.png" alt="Penamaan database gabungan">
-                </div>
-            </div>
-        </div>
-                                                
-        <!-- Navigation Buttons -->
-        <div class="navigation">
-            <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">← Kembali ke Menu Panduan</button>
+
+        <!-- FINAL NAVIGATION -->
+        <div class="slide-navigation">
+            <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">🏠 Menu Utama</button>
+            <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">📚 Menu Panduan</button>
             <button class="nav-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Ke Atas</button>
         </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>&copy; 2024 Tim Hilirisasi 3 - Dit. PHKEI - Kementerian PPN/Bappenas</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: rgba(255, 255, 255, 0.6);">
+                Panduan lengkap konversi PDF ke Excel hingga database format long
+            </p>
+        </footer>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Tim Hilirisasi 3 - Dit. PHKEI - Kementerian PPN/Bappenas</p>
-    </footer>
+    <script>
+        // Navigation Pane Highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.slide-container');
+            
+            // Highlight active section in nav
+            function highlightNav() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNav);
+            
+            // Set first nav link as active initially
+            navLinks[0].classList.add('active');
+        });
+        
+        // Smooth scroll to sections
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Navigation Pane smooth scroll
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>

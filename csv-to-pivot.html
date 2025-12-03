@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV ke Pivot - Tim Hilirisasi 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #01267F 0%, #001a4d 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* ===== NAVIGATION PANE ===== */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-title {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link.active {
+            background: rgba(1, 38, 127, 0.5);
+            color: white;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .nav-section {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 10px 15px;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: calc(100% - 280px);
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #01267F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .title-section h1 {
+            color: #01267F;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .title-section p {
+            color: #666;
+            font-size: 1em;
+        }
+        
+        .back-button {
+            background: #01267F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+        
+        .back-button:hover {
+            background: #001a4d;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== SLIDE STYLES ===== */
+        .slide-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            color: #01267F;
+            scroll-margin-top: 20px;
+        }
+        
+        .slide-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #01267F;
+        }
+        
+        .slide-number {
+            background: #01267F;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        
+        .slide-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #01267F;
+            margin-left: 15px;
+            flex-grow: 1;
+        }
+        
+        .slide-content {
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        .slide-content ol, .slide-content ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-content li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+        
+        .image-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 25px auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-caption {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+        
+        /* ===== ALERT BOXES ===== */
+        .alert-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            border-left-color: #2196F3;
+        }
+        
+        .alert-warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            border-left-color: #4CAF50;
+        }
+        
+        .alert-box h4 {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        /* ===== QUICK TIPS ===== */
+        .quick-tips {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .quick-tips h4 {
+            color: #01267F;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== TABLES ===== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .data-table th {
+            background: #01267F;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        /* ===== CODE BLOCKS ===== */
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-function {
+            color: #66d9ef;
+        }
+        
+        .code-string {
+            color: #e6db74;
+        }
+        
+        .code-number {
+            color: #ae81ff;
+        }
+        
+        /* ===== METHOD CARDS ===== */
+        .method-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .method-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .method-card:hover {
+            border-color: #01267F;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .method-card h4 {
+            color: #01267F;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* ===== NAVIGATION BUTTONS ===== */
+        .slide-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-button {
+            background: #01267F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .nav-button:hover {
+            background: #001a4d;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+            border-radius: 12px;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: 300px;
+            }
+            
+            .main-content {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .slide-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .slide-title {
+                margin-left: 0;
+                text-align: center;
+            }
+            
+            .slide-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-button {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .method-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== ICON STYLES ===== */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .csv-icon {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+        }
+        
+        .excel-icon {
+            background: linear-gradient(135deg, #217346 0%, #1B5E20 100%);
+        }
+        
+        .pivot-icon {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+        
+        .powerquery-icon {
+            background: linear-gradient(135deg, #00a2ed 0%, #0077b5 100%);
+        }
+        
+        .warning-icon {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+        
+        .success-icon {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+        }
+        
+        .info-icon {
+            background: linear-gradient(135deg, #2196F3 0%, #0d47a1 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVIGATION PANE ===== -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">📊 CSV ke PivotTable</div>
+            <div class="sidebar-subtitle">Tim Hilirisasi 3 - Bappenas</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-section">A. TANTANGAN CSV BESAR</li>
+            <li class="nav-item"><a href="#section-1" class="nav-link active">1. Masalah CSV Besar</a></li>
+            <li class="nav-item"><a href="#section-2" class="nav-link">2. Limit Excel</a></li>
+            <li class="nav-item"><a href="#section-3" class="nav-link">3. Solusi Optimal</a></li>
+            
+            <li class="nav-section">B. METODE POWER QUERY</li>
+            <li class="nav-item"><a href="#section-4" class="nav-link">4. Import & Filter</a></li>
+            <li class="nav-item"><a href="#section-5" class="nav-link">5. Load ke Data Model</a></li>
+            <li class="nav-item"><a href="#section-6" class="nav-link">6. Buat PivotTable</a></li>
+            
+            <li class="nav-section">C. TEKNIK LANGSUNG PIVOT</li>
+            <li class="nav-item"><a href="#section-7" class="nav-link">7. Aggregasi di Query</a></li>
+            <li class="nav-item"><a href="#section-8" class="nav-link">8. Auto Pivot Creation</a></li>
+            <li class="nav-item"><a href="#section-9" class="nav-link">9. Performance Tips</a></li>
+            
+            <li class="nav-section">D. TROUBLESHOOTING</li>
+            <li class="nav-item"><a href="#section-10" class="nav-link">10. Common Errors</a></li>
+            <li class="nav-item"><a href="#section-11" class="nav-link">11. Optimasi Memory</a></li>
+            <li class="nav-item"><a href="#section-12" class="nav-link">12. Template Tools</a></li>
+        </ul>
+        
+        <div style="margin-top: 30px; padding: 15px; background: rgba(1, 38, 127, 0.1); border-radius: 8px;">
+            <div style="font-weight: bold; color: white; margin-bottom: 8px;">⚡ Quick Tips</div>
+            <div style="font-size: 0.9em; color: rgba(255, 255, 255, 0.8);">
+                • Filter sebelum import<br>
+                • Use Data Model<br>
+                • Jangan load ke sheet<br>
+                • Refreshable connection
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+            	<img src="Tim H3 (1).png" 
+     		alt="Logo Tim Hilirisasi 3" 
+     		class="logo-real" 
+    		style="width: 54px; height: auto;">
+                    <div class="title-section">
+                        <h1>📊 Panduan: CSV Besar ke PivotTable</h1>
+                        <p>Handle jutaan baris CSV tanpa crash Excel</p>
+                    </div>
+                </div>
+		<a href="panduan-teknis.html" class="back-button">📚 Menu Panduan</a>
+                <a href="index.html" class="back-button"> 🏠 Menu Utama</a>
+            </div>
+        </header>
+
+        <!-- INTRODUCTION -->
+        <div class="slide-container">
+            <div class="slide-content">
+                <h3 style="color: #01267F; text-align: center; margin-bottom: 20px;">🚀 CSV Jutaan Baris? No Problem!</h3>
+                <p style="text-align: center; margin-bottom: 25px;">Gunakan Power Query + Data Model untuk analisis CSV besar langsung ke PivotTable.</p>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon csv-icon">CSV</span> Problem CSV Besar</h4>
+                        <p>• Excel crash saat open<br>
+                           • File size > 500MB<br>
+                           • Loading time lama<br>
+                           • Memory usage tinggi</p>
+                        <p><strong>Solusi:</strong> Connect, don't load!</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon powerquery-icon">PQ</span> Metode Power Query</h4>
+                        <p>• Connect to CSV<br>
+                           • Filter sebelum import<br>
+                           • Load to Data Model<br>
+                           • Create PivotTable</p>
+                        <p><strong>Waktu:</strong> 2-5 menit setup</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon pivot-icon">📈</span> Output Instan</h4>
+                        <p>• PivotTable langsung<br>
+                           • Data tidak di sheet<br>
+                           • Performance optimal<br>
+                           • Bisa refresh anytime</p>
+                        <p><strong>Efisiensi:</strong> 90% lebih cepat</p>
+                    </div>
+                </div>
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ PERINGATAN: Jangan Double-Click CSV!</h4>
+                    <p>Membuka CSV besar langsung di Excel akan menyebabkan:<br>
+                    • <strong>Excel crash/hang</strong><br>
+                    • <strong>Memory overload</strong><br>
+                    • <strong>Long loading time</strong><br>
+                    • <strong>Potential data loss</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 1: MASALAH CSV BESAR ===== -->
+        <div id="section-1" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">1</div>
+                <div class="slide-title">Masalah dengan CSV Besar di Excel</div>
+            </div>
+            <div class="slide-content">
+                <h4>❌ Kenapa Excel Crash?</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon warning-icon">💾</span> Memory Limits</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Excel 32-bit: max 2GB RAM</li>
+                            <li>Excel 64-bit: system memory</li>
+                            <li>CSV load seluruh data ke RAM</li>
+                            <li>Each cell = memory overhead</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon warning-icon">⏱️</span> Performance Issues</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Loading time > 10 menit</li>
+                            <li>Scrolling sangat lambat</li>
+                            <li>Save time sangat lama</li>
+                            <li>Formula calculation stuck</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon warning-icon">📊</span> Data Limitations</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Max rows: 1,048,576</li>
+                            <li>Max columns: 16,384</li>
+                            <li>File size .xlsx: max 2GB</li>
+                            <li>Pivot cache limited</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🔍 Ukuran File vs Risk Level:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>File Size</th>
+                            <th>Estimated Rows</th>
+                            <th>Risk Level</th>
+                            <th>Action Required</th>
+                        </tr>
+                        <tr>
+                            <td>< 10MB</td>
+                            <td>< 100,000</td>
+                            <td style="color: #4CAF50; font-weight: bold;">Low</td>
+                            <td>Open langsung OK</td>
+                        </tr>
+                        <tr>
+                            <td>10MB - 100MB</td>
+                            <td>100K - 1M</td>
+                            <td style="color: #ff9800; font-weight: bold;">Medium</td>
+                            <td>Use Power Query + Filter</td>
+                        </tr>
+                        <tr>
+                            <td>100MB - 500MB</td>
+                            <td>1M - 5M</td>
+                            <td style="color: #f44336; font-weight: bold;">High</td>
+                            <td>Power Query + Data Model</td>
+                        </tr>
+                        <tr>
+                            <td>> 500MB</td>
+                            <td>> 5M</td>
+                            <td style="color: #d32f2f; font-weight: bold;">Critical</td>
+                            <td>Database / Power BI / Python</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 2: LIMIT EXCEL ===== -->
+        <div id="section-2" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">2</div>
+                <div class="slide-title">Limit Teknis Excel dan Solusi</div>
+            </div>
+            <div class="slide-content">
+                <h4>📏 Batasan Excel vs Workarounds</h4>
+                
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📋 Technical Limits:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Limitation</th>
+                            <th>Excel Standard</th>
+                            <th>Excel Data Model</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td>Max Rows</td>
+                            <td>1,048,576</td>
+                            <td>Unlimited*</td>
+                            <td>Use Power Pivot</td>
+                        </tr>
+                        <tr>
+                            <td>Max Columns</td>
+                            <td>16,384</td>
+                            <td>Unlimited*</td>
+                            <td>Use Power Pivot</td>
+                        </tr>
+                        <tr>
+                            <td>File Size</td>
+                            <td>2GB (.xlsx)</td>
+                            <td>No limit</td>
+                            <td>External connections</td>
+                        </tr>
+                        <tr>
+                            <td>Memory</td>
+                            <td>Limited by RAM</td>
+                            <td>Column compression</td>
+                            <td>64-bit Excel</td>
+                        </tr>
+                        <tr>
+                            <td>Calculation</td>
+                            <td>Single thread</td>
+                            <td>Multi-thread</td>
+                            <td>Power Pivot engine</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="alert-box alert-info">
+                    <h4>💡 Apa itu Data Model?</h4>
+                    <p>Data Model adalah <strong>in-memory database</strong> di dalam Excel yang menggunakan teknologi xVelocity:<br>
+                    • <strong>Columnar storage</strong> - data di-compress vertikal<br>
+                    • <strong>No row limit</strong> - hanya dibatasi RAM<br>
+                    • <strong>Fast calculations</strong> - menggunakan DAX formulas<br>
+                    • <strong>Relationships</strong> - seperti database relational</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 3: SOLUSI OPTIMAL ===== -->
+        <div id="section-3" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">3</div>
+                <div class="slide-title">Solusi Optimal: Power Query + Data Model</div>
+            </div>
+            <div class="slide-content">
+                <h4>⚡ Workflow Lengkap CSV → PivotTable</h4>
+                
+                <div class="step-container" style="counter-reset: step-counter; margin: 25px 0;">
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">1</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Connect to CSV (Don't Open!)</h4>
+                            <p><strong>Excel → Data tab → Get Data → From File → From Text/CSV</strong></p>
+                            <p>• Browse ke file CSV<br>
+                               • Klik <strong>Transform Data</strong> (bukan Load!)<br>
+                               • Power Query Editor terbuka</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">2</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Filter Data di Power Query</h4>
+                            <p>• Hapus kolom tidak perlu (Select columns → Remove)<br>
+                               • Filter rows (Click column header → Filter)<br>
+                               • Contoh: Filter tahun hanya 2022-2024<br>
+                               • Ubah data types jika perlu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">3</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Load to Data Model</h4>
+                            <p><strong>Home → Close & Load To...</strong></p>
+                            <p>• Pilih: <strong>"Only Create Connection"</strong><br>
+                               • Check: <strong>"Add this data to the Data Model"</strong><br>
+                               • Klik <strong>Load</strong></p>
+                            <p>Data masuk ke Power Pivot, tidak ke worksheet!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">4</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Create PivotTable</h4>
+                            <p><strong>Insert → PivotTable</strong></p>
+                            <p>• Pilih: <strong>"Use an external data source"</strong><br>
+                               • Choose Connection: pilih query tadi<br>
+                               • Check: <strong>"Add this data to the Data Model"</strong><br>
+                               • Pilih location → Klik <strong>OK</strong></p>
+                            <p>🎉 PivotTable siap digunakan!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 4: IMPORT & FILTER ===== -->
+        <div id="section-4" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">4</div>
+                <div class="slide-title">Import CSV dengan Power Query</div>
+            </div>
+            <div class="slide-content">
+                <h4>📥 Step-by-Step Import & Filter</h4>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📋 Detailed Steps:</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                        <div>
+                            <h5>Before Power Query:</h5>
+                            <ol>
+                                <li>Check CSV file size</li>
+                                <li>Backup original CSV</li>
+                                <li>Open new Excel workbook</li>
+                                <li>Save as template.xlsx</li>
+                                <li>Enable Power Pivot add-in</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h5>Power Query Settings:</h5>
+                            <ol>
+                                <li>File → Options → Data</li>
+                                <li>Power Query options</li>
+                                <li>Disable background data</li>
+                                <li>Set privacy to ignore</li>
+                                <li>Enable fast combine</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// Power Query akan auto-detect:</span>
+<span class="code-comment">// 1. Delimiter (comma, semicolon, tab)</span>
+<span class="code-comment">// 2. Encoding (UTF-8, ANSI, etc.)</span>
+<span class="code-comment">// 3. Data types (text, number, date)</span>
+<span class="code-comment">// 4. Headers (first row as headers)</span>
+
+<span class="code-comment">// Jika auto-detect salah:</span>
+<span class="code-string">1.</span> Klik "Transform Data"
+<span class="code-string">2.</span> Home → Data Source Settings
+<span class="code-string">3.</span> Ubah delimiter/encoding
+<span class="code-string">4.</span> Refresh preview
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>💡 Pro Tips untuk CSV Besar:</h4>
+                    <p>1. <strong>Filter EARLY</strong> - sebelum data masuk Excel<br>
+                    2. <strong>Remove unnecessary columns</strong> - kurangi memory usage<br>
+                    3. <strong>Change data types</strong> - text → number jika bisa<br>
+                    4. <strong>Group by jika perlu</strong> - aggregate di query</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 5: DATA MODEL ===== -->
+        <div id="section-5" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">5</div>
+                <div class="slide-title">Load ke Data Model (Power Pivot)</div>
+            </div>
+            <div class="slide-content">
+                <h4>🏗️ Menggunakan Data Model untuk Unlimited Rows</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">📊</span> Regular Excel</h4>
+                        <p><strong>Limitations:</strong><br>
+                        • Max 1M rows<br>
+                        • All data in sheet<br>
+                        • Slow with large data<br>
+                        • Single table only</p>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon success-icon">⚡</span> Data Model</h4>
+                        <p><strong>Advantages:</strong><br>
+                        • Unlimited rows*<br>
+                        • Column compression<br>
+                        • Lightning fast<br>
+                        • Multiple relationships<br>
+                        • DAX measures</p>
+                    </div>
+                </div>
+                
+                <div class="step-container" style="counter-reset: step-counter; margin: 25px 0;">
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">1</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Enable Power Pivot Add-in</h4>
+                            <p><strong>File → Options → Add-ins</strong></p>
+                            <ol>
+                                <li>Di Manage dropdown: <strong>"COM Add-ins"</strong></li>
+                                <li>Klik <strong>"Go..."</strong></li>
+                                <li>Check: <strong>"Microsoft Power Pivot for Excel"</strong></li>
+                                <li>Klik <strong>OK</strong></li>
+                            </ol>
+                            <p>Tab "Power Pivot" muncul di ribbon</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">2</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Load to Data Model</h4>
+                            <p>Di Power Query Editor:<br>
+                            <strong>Home → Close & Load To...</strong></p>
+                            <div style="background: white; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd;">
+                                <p><strong>Pilih:</strong> Only Create Connection<br>
+                                <strong>Check:</strong> Add this data to the Data Model<br>
+                                <strong>Check:</strong> Enable load to report<br>
+                                <strong>Klik:</strong> Load</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">3</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Verify in Power Pivot</h4>
+                            <p><strong>Power Pivot tab → Manage</strong></p>
+                            <p>• Window Power Pivot terbuka<br>
+                               • Data dari CSV sudah ada di sini<br>
+                               • Bisa tambah calculated columns<br>
+                               • Buat relationships antar tables</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 6: BUAT PIVOTTABLE ===== -->
+        <div id="section-6" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">6</div>
+                <div class="slide-title">Buat PivotTable dari Data Model</div>
+            </div>
+            <div class="slide-content">
+                <h4>📈 Langsung Analisis dengan PivotTable</h4>
+                
+                <div class="step-container" style="counter-reset: step-counter; margin: 25px 0;">
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">1</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Insert PivotTable</h4>
+                            <p><strong>Insert tab → PivotTable</strong></p>
+                            <div style="background: white; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd;">
+                                <p><strong>Pilih:</strong> Use an external data source<br>
+                                <strong>Choose Connection:</strong> pilih query dari CSV<br>
+                                <strong>Check:</strong> Add this data to the Data Model<br>
+                                <strong>Location:</strong> New Worksheet atau Existing<br>
+                                <strong>Klik:</strong> OK</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">2</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Configure PivotTable</h4>
+                            <p>Field List akan menunjukkan:<br>
+                            • Tables dari Data Model<br>
+                            • All columns dari CSV<br>
+                            • Measures (jika ada)<br>
+                            • Hierarchies (jika ada)</p>
+                            <p><strong>Drag fields:</strong><br>
+                            • Rows: kategori (e.g., Product, Region)<br>
+                            • Columns: time (e.g., Year, Month)<br>
+                            • Values: metrics (e.g., Sales, Quantity)<br>
+                            • Filters: untuk filter global</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">3</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Add DAX Measures (Optional)</h4>
+                            <p>Untuk calculations advanced:</p>
+                            <div class="code-block">
+<span class="code-comment">// Contoh DAX measures:</span>
+<span class="code-string">Total Sales</span> = SUM(Sales[Amount])
+<span class="code-string">Average Price</span> = AVERAGE(Sales[Price])
+<span class="code-string">YOY Growth</span> = 
+    ([Total Sales] - 
+    CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Calendar[Date]))) 
+    / CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Calendar[Date]))
+                            </div>
+                            <p>DAX lebih powerful dari Excel formulas biasa!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 7: AGGREGASI DI QUERY ===== -->
+        <div id="section-7" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">7</div>
+                <div class="slide-title">Teknik: Aggregasi di Power Query</div>
+            </div>
+            <div class="slide-content">
+                <h4>🧮 Group Data Sebelum Load</h4>
+                
+                <div class="alert-box alert-info">
+                    <h4>🎯 SCENARIO:</h4>
+                    <p>CSV 5 juta baris transaksi sales. Ingin:<br>
+                    1. Total sales per bulan<br>
+                    2. Average per region<br>
+                    3. Count transaksi per product<br>
+                    <strong>TANPA load 5 juta baris ke Excel!</strong></p>
+                </div>
+                
+                <div class="code-block">
+<span class="code-comment">// Step 1: Group By di Power Query</span>
+<span class="code-string">1.</span> Transform → Group By
+<span class="code-string">2.</span> Pilih kolom untuk group:
+    - Month
+    - Region  
+    - Product
+<span class="code-string">3.</span> Operation:
+    - Sum untuk Amount
+    - Count untuk Transactions
+    - Average untuk Price
+<span class="code-string">4.</span> New column names:
+    - Total_Sales
+    - Transaction_Count
+    - Avg_Price
+
+<span class="code-comment">// RESULT: 5 juta baris → mungkin 500 baris!</span>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #1565c0;">📊 Contoh: 5 Juta → 500 Baris</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Before Group By</th>
+                            <th>After Group By</th>
+                            <th>Reduction</th>
+                        </tr>
+                        <tr>
+                            <td>5,000,000 rows<br>Individual transactions</td>
+                            <td>500 rows<br>Monthly summaries</td>
+                            <td>99.99% smaller!</td>
+                        </tr>
+                        <tr>
+                            <td>2GB file size</td>
+                            <td>50KB results</td>
+                            <td>40,000x smaller</td>
+                        </tr>
+                        <tr>
+                            <td>All raw data</td>
+                            <td>Aggregated data</td>
+                            <td>Analysis ready</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 8: AUTO PIVOT CREATION ===== -->
+        <div id="section-8" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">8</div>
+                <div class="slide-title">Auto-Create PivotTable</div>
+            </div>
+            <div class="slide-content">
+                <h4>⚡ One-Click PivotTable Creation</h4>
+                
+                <div class="step-container" style="counter-reset: step-counter; margin: 25px 0;">
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">1</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Load Aggregated Data</h4>
+                            <p>Setelah Group By di Power Query:<br>
+                            <strong>Home → Close & Load</strong></p>
+                            <p>Excel akan tanya:</p>
+                            <div style="background: white; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid #ddd;">
+                                <p><strong>"Do you want to create a PivotTable with this data?"</strong><br>
+                                → Klik: <strong>Yes</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">2</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Excel Auto-Creates PivotTable</h4>
+                            <p>Excel otomatis:<br>
+                            • Buat PivotTable di sheet baru<br>
+                            • Tambahkan semua fields ke Field List<br>
+                            • Set initial layout<br>
+                            • Apply default formatting</p>
+                            <p>Anda hanya perlu drag fields sesuai kebutuhan!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step" style="display: flex; margin-bottom: 25px; align-items: flex-start; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #01267F;">
+                        <div style="background: #01267F; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-right: 15px;">3</div>
+                        <div style="flex: 1;">
+                            <h4 style="color: #01267F; margin-bottom: 8px;">Customize & Analyze</h4>
+                            <p>• Drag Month ke Rows<br>
+                               • Drag Region ke Columns<br>
+                               • Drag Total_Sales ke Values<br>
+                               • Add filters jika perlu<br>
+                               • Apply number formatting<br>
+                               • Add conditional formatting</p>
+                            <p>🎉 Analysis selesai dalam 2 menit!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 9: PERFORMANCE TIPS ===== -->
+        <div id="section-9" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">9</div>
+                <div class="slide-title">Performance Tips & Best Practices</div>
+            </div>
+            <div class="slide-content">
+                <h4>⚡ Optimasi untuk CSV Sangat Besar</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">🛠️</span> Excel Settings</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Gunakan Excel 64-bit</li>
+                            <li>Increase RAM (min 8GB)</li>
+                            <li>Disable unnecessary add-ins</li>
+                            <li>Set calculation to manual</li>
+                            <li>Disable graphics hardware accel</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">📁</span> File Preparation</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Split CSV jika > 5GB</li>
+                            <li>Remove unnecessary columns</li>
+                            <li>Convert to proper data types</li>
+                            <li>Handle NULL/missing values</li>
+                            <li>Use ZIP compression</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">🔧</span> Power Query Tips</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Filter EARLY in query</li>
+                            <li>Remove columns tidak perlu</li>
+                            <li>Change data types early</li>
+                            <li>Use query folding jika bisa</li>
+                            <li>Disable preview untuk besar</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>🎯 Power Query Performance Settings:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Setting</th>
+                            <th>Location</th>
+                            <th>Recommendation</th>
+                            <th>Reason</th>
+                        </tr>
+                        <tr>
+                            <td>Background Data</td>
+                            <td>File → Options → Data</td>
+                            <td>Disable</td>
+                            <td>Prevent auto refresh</td>
+                        </tr>
+                        <tr>
+                            <td>Privacy Levels</td>
+                            <td>File → Options → Data</td>
+                            <td>Ignore</td>
+                            <td>Faster query combine</td>
+                        </tr>
+                        <tr>
+                            <td>Data Preview</td>
+                            <td>File → Options → Data</td>
+                            <td>1000 rows max</td>
+                            <td>Faster loading</td>
+                        </tr>
+                        <tr>
+                            <td>Parallel Loading</td>
+                            <td>File → Options → Advanced</td>
+                            <td>Enable</td>
+                            <td>Faster data load</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 10: COMMON ERRORS ===== -->
+        <div id="section-10" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">10</div>
+                <div class="slide-title">Troubleshooting Common Errors</div>
+            </div>
+            <div class="slide-content">
+                <h4>🔧 Solusi Masalah Umum</h4>
+                
+                <div style="background: #ffebee; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #c62828;">❌ Common Errors & Solutions:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Error Message</th>
+                            <th>Cause</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td>"Excel ran out of resources"</td>
+                            <td>Too much data in worksheet</td>
+                            <td>Use Data Model, not worksheet</td>
+                        </tr>
+                        <tr>
+                            <td>"File not loaded completely"</td>
+                            <td>CSV too large for Excel</td>
+                            <td>Use Power Query + Filter</td>
+                        </tr>
+                        <tr>
+                            <td>"Data type mismatch"</td>
+                            <td>Mixed data in columns</td>
+                            <td>Change type in Power Query</td>
+                        </tr>
+                        <tr>
+                            <td>"Refresh takes forever"</td>
+                            <td>Too much data to process</td>
+                            <td>Aggregate in query first</td>
+                        </tr>
+                        <tr>
+                            <td>"Can't create PivotTable"</td>
+                            <td>Data Model not enabled</td>
+                            <td>Enable Power Pivot add-in</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="alert-box alert-warning">
+                    <h4>⚠️ When Excel Crashes:</h4>
+                    <ol>
+                        <li><strong>Don't panic</strong> - data is safe in CSV</li>
+                        <li><strong>Close Excel</strong> via Task Manager</li>
+                        <li><strong>Open new Excel</strong> with blank workbook</li>
+                        <li><strong>Use Power Query</strong> to connect to CSV</li>
+                        <li><strong>Filter aggressively</strong> before loading</li>
+                        <li><strong>Load to Data Model</strong>, not worksheet</li>
+                        <li><strong>Create PivotTable</strong> from Data Model</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 11: OPTIMASI MEMORY ===== -->
+        <div id="section-11" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">11</div>
+                <div class="slide-title">Optimasi Memory & Performance</div>
+            </div>
+            <div class="slide-content">
+                <h4>💾 Memory Management untuk CSV Besar</h4>
+                
+                <div class="method-cards">
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">📏</span> Data Size Reduction</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Remove unnecessary columns</li>
+                            <li>Filter rows early</li>
+                            <li>Use appropriate data types</li>
+                            <li>Aggregate before load</li>
+                            <li>Compress numeric data</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">⚙️</span> Excel Configuration</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Use 64-bit Excel</li>
+                            <li>Allocate more RAM</li>
+                            <li>Disable auto-calculate</li>
+                            <li>Turn off animations</li>
+                            <li>Close other programs</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h4><span class="icon info-icon">🔍</span> Monitoring Tools</h4>
+                        <ul style="margin-top: 10px;">
+                            <li>Task Manager (memory)</li>
+                            <li>Resource Monitor</li>
+                            <li>Excel Performance Monitor</li>
+                            <li>Power Query diagnostics</li>
+                            <li>Data Model size check</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="quick-tips">
+                    <h4>📊 Memory Usage by Data Type:</h4>
+                    <table class="data-table">
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Memory per 1M rows</th>
+                            <th>Optimization</th>
+                        </tr>
+                        <tr>
+                            <td>Text (string)</td>
+                            <td>~200MB</td>
+                            <td>Convert to category/code</td>
+                        </tr>
+                        <tr>
+                            <td>Integer (whole number)</td>
+                            <td>~8MB</td>
+                            <td>Use smallest int type</td>
+                        </tr>
+                        <tr>
+                            <td>Decimal (float)</td>
+                            <td>~16MB</td>
+                            <td>Reduce decimal places</td>
+                        </tr>
+                        <tr>
+                            <td>Date/Time</td>
+                            <td>~16MB</td>
+                            <td>Store as date only</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean (true/false)</td>
+                            <td>~1MB</td>
+                            <td>Use 1/0 instead</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SECTION 12: TEMPLATE TOOLS ===== -->
+        <div id="section-12" class="slide-container">
+            <div class="slide-header">
+                <div class="slide-number">12</div>
+                <div class="slide-title">Template & Tools Siap Pakai</div>
+            </div>
+            <div class="slide-content">
+                <h4>🛠️ Resources untuk Memudahkan</h4>
+                
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #2e7d32;">📁 Download Template:</h4>
+                    <div class="method-cards">
+                        <div class="method-card">
+                            <h4><span class="icon excel-icon">📊</span> Excel Template</h4>
+                            <p><strong>Fitur:</strong></p>
+                            <ul>
+                                <li>Pre-built Power Query</li>
+                                <li>Auto PivotTable setup</li>
+                                <li>Performance optimized</li>
+                                <li>Example CSV included</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>CSV_to_Pivot_Template.xlsx</em></p>
+                        </div>
+                        
+                        <div class="method-card">
+                            <h4><span class="icon powerquery-icon">🔧</span> Power Query Script</h4>
+                            <p><strong>Fitur:</strong></p>
+                            <ul>
+                                <li>Auto-detect CSV structure</li>
+                                <li>Smart filtering</li>
+                                <li>Performance monitoring</li>
+                                <li>Error handling</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>CSV_Loader.pq</em></p>
+                        </div>
+                        
+                        <div class="method-card">
+                            <h4><span class="icon info-icon">📋</span> Checklist & Guide</h4>
+                            <p><strong>Fitur:</strong></p>
+                            <ul>
+                                <li>Step-by-step checklist</li>
+                                <li>Troubleshooting guide</li>
+                                <li>Performance benchmarks</li>
+                                <li>Best practices</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><em>CSV_Processing_Guide.pdf</em></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert-box alert-success">
+                    <h4>✅ Workflow Lengkap:</h4>
+                    <p>1. <strong>Prepare CSV</strong> - backup, check size, note requirements<br>
+                    2. <strong>Power Query</strong> - connect, filter, transform<br>
+                    3. <strong>Data Model</strong> - load to Power Pivot<br>
+                    4. <strong>PivotTable</strong> - create from Data Model<br>
+                    5. <strong>Analyze</strong> - drag fields, add measures<br>
+                    6. <strong>Refresh</strong> - update with new CSV data</p>
+                </div>
+                
+                <div class="slide-navigation">
+                    <button class="nav-button" onclick="window.location.href='index.html'">🏠 Menu Utama</button>
+                    <button class="nav-button" onclick="window.location.href='panduan-teknis.html'">📚 Menu Panduan</button>
+                    <button class="nav-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Ke Atas</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p>&copy; 2024 Tim Hilirisasi 3 - Dit. PHKEI - Kementerian PPN/Bappenas</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: rgba(255, 255, 255, 0.6);">
+                Panduan membaca CSV besar langsung ke PivotTable di Excel
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        // Navigation Pane Highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.slide-container');
+            
+            // Highlight active section in nav
+            function highlightNav() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', highlightNav);
+            
+            // Set first nav link as active initially
+            navLinks[0].classList.add('active');
+        });
+        
+        // Smooth scroll to sections
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Navigation Pane smooth scroll
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
